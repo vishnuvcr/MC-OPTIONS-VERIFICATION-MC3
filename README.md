@@ -51,6 +51,10 @@ An independent external original BATMAN source matching the exact signature was 
 [Supplement](research/manuscript/SUPPLEMENT_RQ6.md)  
 [Figures and charts](research/manuscript/FIGURES.md)
 
+## Workflows
+
+[Manual workflow index](research/WORKFLOW_INDEX.md)
+
 ## Governance logs
 
 [Status log](research/logs/STATUS_LOG.md)  
