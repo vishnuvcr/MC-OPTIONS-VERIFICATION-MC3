@@ -28,3 +28,4 @@ Decisions recorded:
 - Mark open paper trades every 10 minutes.
 - Apply entry-cost estimates and expiry STT separately from gross MTM.
 - Close at expiry after 15:35 IST using the index settlement close.
+\n## Target-expiry integrity correction\nThe live chain can contain multiple expiries. All signal and mark calculations are now restricted to the selected contract expiry to prevent cross-expiry quote contamination.\n
