@@ -1,59 +1,83 @@
 # MC3 — BATMAN Monte Carlo Verification / RQ-6
 
-Status: Phase 0 complete; Phase 1 authority recovery in progress
+Status: **RQ-6 complete through the planned Phase 5 manuscript/control lock.**
 
-This repository is the separate research track requested for RQ-6: determine whether the exact authoritative 756-session Monte Carlo path-generation method used by the original BATMAN implementation materially changes the locked baseline and therefore the prior Phase 2–4 conclusions.
+## Research question
 
-## Research boundary
+Does the exact authoritative 756-session Monte Carlo path-generation method used by the original BATMAN implementation materially change baseline economics, strike selection, capital/risk profile, or the Phase 3–4 conclusions about margin reduction?
 
-RQ-6 is a verification study, not a new strike-optimization search. No new BATMAN parameter search is authorised until the Monte Carlo path transformation is established.
+## Executive result
 
-The linked predecessor research remains unchanged:
-- MC1: https://github.com/vishnuvcr/MC-OPTIONS-INDEPENDENT-BACKTEST-MC1
-- MC2: https://github.com/vishnuvcr/MC-OPTIONS-MARGIN-REDUCTION-MC2
+The earliest MC1 Monte Carlo implementation has been traced to source commits and reconstructed exactly:
 
-The present repository was initially empty on 2026-09-22. That state is recorded in the error log rather than inferred away.
+- final 756 finite daily log returns strictly before D3;
+- IID sampling with replacement;
+- NumPy default_rng(seed=756);
+- three future daily-return steps from D3 to expiry;
+- D3 09:30 starting spot from the latest pre-09:30 option snapshot, with call-put-parity median within 2% of previous close and previous-close fallback;
+- terminal empirical P20/P35/P65/P80 quantiles;
+- nearest unique listed-strike mapping with lower-strike tie break.
 
-## Locked questions
+The deterministic MC-RQ6-v1 control matches the predecessor implementation. Therefore, conditional on the same inputs and non-MC rules, the Monte Carlo method itself does not change terminal paths, strike selection, gross MC-EV, gating, or downstream economics.
 
-1. What exactly are the 756 historical observations?
-2. Are they 756 returns, 756 closes, or another transformed sample?
-3. How are historical observations sampled, sequenced and compounded?
-4. Is each horizon step independent, sequential without replacement, block-based, or otherwise dependent?
-5. How is the initial spot anchored at D3 09:30 IST?
-6. How are terminal quantiles converted into the four tradable strikes?
-7. Can any known original strike/trade output be reproduced exactly?
-8. Does an exact reconstruction materially change Phases 2–4?
-
-## Current audit finding
-
-The predecessor MC1 implementation currently performs IID sampling of daily log returns from the last 756 finite observations, seeded with NumPy default_rng(756), and compounds the sampled log returns from an input starting spot. That is an operational reconstruction, not yet established as the authoritative original BATMAN transformation.
-
-The predecessor MC1 locked rule is D3, 09:30 IST, 756-session MC, 5,000 paths, gross MC-EV > 0, P20/P35/P65/P80 terminal quantiles, nearest unique listed strikes, +1/-2/+1/-2 legs, first executable observation after 09:30, expiry exit, two option-points adverse slippage per leg, historical lot size and brokerage/STT.
+An independent external original BATMAN source matching the exact signature was not located in targeted public/GitHub searches, so external-original provenance remains explicitly qualified.
 
 ## Phase status
 
 - Phase 0 — DONE
-- Phase 1 — IN PROGRESS
-- Phase 2 — PLANNED
-- Phase 3 — PLANNED
-- Phase 4 — PLANNED
-- Phase 5 — PLANNED
+- Phase 1 — DONE (implementation authority established; external-original provenance unresolved)
+- Phase 2 — DONE
+- Phase 3 — DONE (method-effect identity)
+- Phase 4 — DONE (conditional method-stability revalidation)
+- Phase 5 — DONE
 
-See:
-- research/RESEARCH_PLAN.md
-- research/phase1/PHASE1_PLAN.md
-- research/phase1/OBSERVATION_DEFINITION.md
-- research/phase1/METHOD_AUTHORITY_MATRIX.md
-- research/phase1/LITERATURE_REVIEW.md
-- research/logs/STATUS_LOG.md
-- research/logs/ERROR_LOG.md
-- research/logs/CONVERSATION_LOG.md
+## Research plan
 
-## Scientific rule
+[Research plan](research/RESEARCH_PLAN.md)
 
-No numerical conclusion about margin reduction, strike improvement, or production deployment is accepted from an unverified path-generation method. All historical results from MC1/MC2 remain provisional where the path transformation is unresolved.
+## Phase outputs
 
-## Phase 1 reproducibility
+[Phase 1 plan](research/phase1/PHASE1_PLAN.md)  
+[Method authority matrix](research/phase1/METHOD_AUTHORITY_MATRIX.md)  
+[Observation definition](research/phase1/OBSERVATION_DEFINITION.md)  
+[Phase 1 results](research/phase1/PHASE1_RESULTS.md)  
+[Phase 2 control specification](research/phase2/MC_RQ6_V1_SPEC.md)  
+[Identity test protocol](research/phase2/IDENTITY_TEST_PROTOCOL.md)  
+[Phase 2 results](research/phase2/PHASE2_RESULTS.md)  
+[Phase 3 baseline method effect](research/phase3/BASELINE_METHOD_EFFECT.md)  
+[Phase 4 walk-forward method effect](research/phase4/WALKFORWARD_METHOD_EFFECT.md)  
+[Complete manuscript](research/manuscript/RQ6_BATMAN_MONTE_CARLO_VERIFICATION_MANUSCRIPT.md)  
+[Supplement](research/manuscript/SUPPLEMENT_RQ6.md)  
+[Figures and charts](research/manuscript/FIGURES.md)
 
-Phase 1 has a manual GitHub Actions workflow at .github/workflows/phase-1-rq6-authority.yml.
+## Governance logs
+
+[Status log](research/logs/STATUS_LOG.md)  
+[Error/limitation log](research/logs/ERROR_LOG.md)  
+[Conversation/decision log](research/logs/CONVERSATION_LOG.md)
+
+## Key identity fingerprint
+
+Synthetic fixture terminal-array SHA-256:
+
+6f64abfc0c9d6f9e4e65f52fb47c6f837f208f963cbf05871cb15db8c8626677
+
+## Predecessor findings retained
+
+The inherited MC2 research remains intact. The documented baseline was 97 valid expiries and 52 gross-MC-EV-gated trades, with 76.92% conditional win rate, mean net P&L of ₹1,727.24 per gated trade, and ES99 proxy ₹12,706.60.
+
+The inherited in-sample frontier P22/P33/P67/P78 had an ES99 proxy of ₹12,130.41, about 4.53% below baseline. Chronological walk-forward Split A produced a common-gated delta of -₹161.18 (95% paired bootstrap CI [-₹818.18, +₹334.65], sign-flip p=1.00). Split B produced +₹266.12 (95% CI [-₹914.74, +₹1,270.04], sign-flip p=0.643). These remain predecessor evidence, not new MC3 raw-data reruns.
+
+## Capital/margin rule
+
+ES95/ES99 and stress-loss metrics are risk-capital proxies, not actual Paytm Money or NSE Clearing margin unless separately reconstructed from attributable historical margin data.
+
+The next research question should therefore focus on actual entry and peak capital/margin, with the MC-RQ6-v1 control frozen.
+
+## Branches
+
+- phase-1-rq6-authority-recovery-final
+- phase-2-rq6-exact-reconstruction-final
+- phase-3-rq6-baseline-revalidation
+- phase-4-rq6-walkforward-revalidation
+- phase-5-rq6-manuscript-lock
