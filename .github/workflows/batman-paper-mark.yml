@@ -1,0 +1,58 @@
+name: BATMAN PAPER TRADE — LIVE MARK
+
+on:
+  schedule:
+    - cron: "*/10 4-10 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      underlying:
+        description: "Instrument"
+        required: true
+        default: "BOTH"
+        type: choice
+        options: [BOTH, NIFTY, SENSEX]
+
+concurrency:
+  group: batman-paper-trade-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  mark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-prospective.txt
+      - name: Mark open paper positions
+        env:
+          BSE_OPTION_CHAIN_URL: ${{ secrets.BSE_OPTION_CHAIN_URL }}
+          PAYTM_MONEY_JWT_TOKEN: ${{ secrets.PAYTM_MONEY_JWT_TOKEN }}
+        run: |
+          python -m src.prospective_validation.cli mark --underlying "${{ inputs.underlying || 'BOTH' }}"
+          python -m src.prospective_validation.cli site
+      - name: Commit marks
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/paper site
+          if git diff --cached --quiet; then
+            echo "No mark changes."
+          else
+            git commit -m "Prospective BATMAN: update live marks"
+            git push
+          fi
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy Pages
+        uses: actions/deploy-pages@v4
