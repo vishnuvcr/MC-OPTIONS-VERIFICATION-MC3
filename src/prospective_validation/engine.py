@@ -331,8 +331,20 @@ def mark(underlying_filter: str = "BOTH") -> None:
         observed = _now_ist()
         try:
             expiry = date.fromisoformat(pos["expiry"])
-            if observed.date() > expiry or (observed.date() == expiry and observed.time() >= time(15, 35)):
+            market_close = time(15, 30) if pos["underlying"] == "SENSEX" else time(15, 40)
+            if observed.date() > expiry or (observed.date() == expiry and observed.time() >= market_close):
                 _close_if_expired(pid, pos, observed)
+                continue
+            if observed.time() > market_close:
+                append_jsonl("events.jsonl", {
+                    "event_type": "MARK_SKIP",
+                    "timestamp_utc": now_utc(),
+                    "position_id": pid,
+                    "underlying": pos["underlying"],
+                    "expiry": pos["expiry"],
+                    "reason": "market_closed_for_underlying",
+                    "observed_timestamp_ist": observed.isoformat(),
+                })
                 continue
 
             chain, meta = live_chain(pos["underlying"])
