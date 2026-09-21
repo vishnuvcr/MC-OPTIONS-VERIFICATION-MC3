@@ -9,3 +9,9 @@ Existing RQ-6 limitations remain unchanged.
 - Manual `force_today` runs are diagnostics only and are not counted as valid prospective D3 observations unless the logged date is actually D3.
 - The paper-trade layer never submits broker orders.
 - Current lot-size defaults are locked for the current 2026 regime (NIFTY 65; SENSEX 20). If exchange contract metadata changes, this module must be versioned and updated before affected contracts are accepted.
+
+## PV-2 hardening notes
+- The initial dashboard implementation used nested f-strings with conflicting quotes; this was refactored before handoff.
+- The first engine version could treat a manual forced scan as a valid prospective observation; this was corrected so forced scans are diagnostic-only and cannot open paper trades.
+- GitHub Actions cannot guarantee exact 09:30 execution, so the operational protocol uses a bounded 09:25–09:40 capture window and records the actual observation timestamp. This is an explicit operational accommodation, not a silent change to the locked research rule.
+- SENSEX automated validation still depends on a configured attributable BSE/market-data adapter; no synthetic fallback is permitted.
