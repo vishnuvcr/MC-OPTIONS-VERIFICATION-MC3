@@ -55,6 +55,25 @@ An independent external original BATMAN source matching the exact signature was 
 
 [Manual workflow index](research/WORKFLOW_INDEX.md)
 
+
+## Prospective validation — BATMAN PAPER TRADE
+
+The locked MC-RQ6-v1 strategy now has a separate prospective-validation layer:
+
+[Prospective validation hub](research/prospective_validation/README.md)  
+[Prospective protocol](research/prospective_validation/PROTOCOL.md)  
+[Setup and data-source configuration](research/prospective_validation/SETUP.md)
+
+### Operational workflows
+
+- **BATMAN PAPER TRADE** — scheduled D3 scanning, signal logging, gate-controlled paper entry, append-only records and GitHub Pages publication.
+- **BATMAN PAPER TRADE — LIVE MARK** — 10-minute live MTM updates and expiry-day closure.
+- **Prospective Validation CI** — syntax and unit-test gate for the module.
+
+Primary records are stored under `data/paper/`. No workflow in this module submits live broker orders.
+
+**SENSEX note:** automatic prospective validation requires an attributable configured BSE/market-data option-chain adapter; the workflow fails closed instead of using synthetic prices.
+
 ## Governance logs
 
 [Status log](research/logs/STATUS_LOG.md)  
@@ -85,4 +104,4 @@ The next research question should therefore focus on actual entry and peak capit
 - phase-2-rq6-exact-reconstruction-final
 - phase-3-rq6-baseline-revalidation
 - phase-4-rq6-walkforward-revalidation
-- phase-5-rq6-manuscript-lock
+- phase-5-rq6-manuscript-lock\n- prospective-validation-batman-paper-trade
