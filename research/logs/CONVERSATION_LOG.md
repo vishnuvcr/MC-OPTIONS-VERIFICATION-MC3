@@ -19,3 +19,12 @@ Implementation decision:
 - GitHub Actions every 5 minutes for scan/verification and every 10 minutes for live marks;
 - Pages deployed from the generated site;
 - fail closed on missing or unauthenticated market data.
+
+## PV implementation hardening
+Decisions recorded:
+- Keep MC-RQ6-v1 unchanged.
+- Use 09:25–09:40 IST only as an operational capture window around the frozen 09:30 target; retain actual timestamps.
+- Manual force mode is diagnostics-only and cannot open a prospective paper position.
+- Mark open paper trades every 10 minutes.
+- Apply entry-cost estimates and expiry STT separately from gross MTM.
+- Close at expiry after 15:35 IST using the index settlement close.
