@@ -295,7 +295,8 @@ def scan(underlying_filter: str = "BOTH", force_today: bool = False) -> None:
 
 def _close_if_expired(pid: str, pos: dict[str, Any], observed: pd.Timestamp) -> None:
     expiry = date.fromisoformat(pos["expiry"])
-    if observed.date() < expiry or observed.time() < time(15, 35):
+    market_close = time(15, 30) if pos["underlying"] == "SENSEX" else time(15, 40)
+    if observed.date() < expiry or observed.time() < market_close:
         return
     daily = fetch_yahoo_daily(INDEX_TICKERS[pos["underlying"]], years=2)
     rows = daily[daily.index <= pd.Timestamp(expiry)]
