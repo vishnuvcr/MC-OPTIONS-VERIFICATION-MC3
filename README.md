@@ -41,6 +41,7 @@ An independent external original BATMAN source matching the exact signature was 
 [Method authority matrix](research/phase1/METHOD_AUTHORITY_MATRIX.md)  
 [Observation definition](research/phase1/OBSERVATION_DEFINITION.md)  
 [Phase 1 results](research/phase1/PHASE1_RESULTS.md)  
+[External source audit](research/phase1/EXTERNAL_SOURCE_AUDIT.md)  
 [Phase 2 control specification](research/phase2/MC_RQ6_V1_SPEC.md)  
 [Identity test protocol](research/phase2/IDENTITY_TEST_PROTOCOL.md)  
 [Phase 2 results](research/phase2/PHASE2_RESULTS.md)  
