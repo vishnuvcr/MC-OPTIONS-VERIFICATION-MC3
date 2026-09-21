@@ -152,18 +152,22 @@ def scan(underlying_filter: str = "BOTH", force_today: bool = False) -> None:
                 })
                 continue
 
+            target_chain = chain.loc[chain["expiry"] == pd.Timestamp(expiry)].copy()
+            if target_chain.empty:
+                raise RuntimeError(f"live chain has no rows for target expiry {expiry}")
+
             daily = fetch_yahoo_daily(INDEX_TICKERS[underlying], years=5)
             prior = daily[daily.index < pd.Timestamp(today)]
             if prior.empty:
                 raise RuntimeError("missing previous close")
             previous_close = float(prior.iloc[-1])
             returns = historical_log_returns(daily, pd.Timestamp(today), 756)
-            s0, s0_source = parity_spot(chain, previous_close)
+            s0, s0_source = parity_spot(target_chain, previous_close)
 
             terminals = simulate_terminal_paths(s0, returns, horizon=3, paths=5000, seed=756)
             targets = quantile_targets(terminals)
-            strikes = choose_unique_strikes(chain, targets)
-            ev = portfolio_mc_ev(terminals, strikes, chain)
+            strikes = choose_unique_strikes(target_chain, targets)
+            ev = portfolio_mc_ev(terminals, strikes, target_chain)
 
             sig = {
                 **base,
@@ -217,11 +221,11 @@ def scan(underlying_filter: str = "BOTH", force_today: bool = False) -> None:
                     ("P35_PE", "PE", 1), ("P20_PE", "PE", -2),
                     ("P65_CE", "CE", 1), ("P80_CE", "CE", -2)
                 ]:
-                    ep, src = entry_price(best_quote(chain, side, strikes[label]), qty, SLIPPAGE)
+                    ep, src = entry_price(best_quote(target_chain, side, strikes[label]), qty, SLIPPAGE)
                     entry[label] = ep
                     entry_sources[label] = src
 
-                lot, lot_source = _lot_size(underlying, expiry, chain)
+                lot, lot_source = _lot_size(underlying, expiry, target_chain)
                 cost_model = enhanced_entry_costs(
                     underlying=underlying,
                     prices=entry,
@@ -335,7 +339,10 @@ def mark(underlying_filter: str = "BOTH") -> None:
             chain = chain.copy()
             if "expiry" in chain.columns:
                 chain["expiry"] = pd.to_datetime(chain["expiry"], errors="coerce").dt.normalize()
-            pnl, marks = mark_pnl_rupees(pos, chain)
+            expiry_chain = chain.loc[chain["expiry"] == pd.Timestamp(expiry)].copy()
+            if expiry_chain.empty:
+                raise RuntimeError(f"live chain has no rows for open position expiry {expiry}")
+            pnl, marks = mark_pnl_rupees(pos, expiry_chain)
             entry_cost = float(pos.get("entry_costs_estimate", {}).get("total_enhanced_entry_cost", 0.0))
             append_jsonl("events.jsonl", {
                 "event_type": "MARK",
