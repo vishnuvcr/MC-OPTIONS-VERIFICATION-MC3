@@ -18,3 +18,9 @@ No workflow in this module submits live orders to Paytm Money or any other broke
 For NIFTY, the default market-data adapter uses the public NSE option-chain service. SENSEX live option data requires a configured adapter/credential; the system fails closed and logs DATA_UNAVAILABLE when it cannot obtain attributable live option data.
 
 See [setup](SETUP.md) and [protocol](PROTOCOL.md).
+
+## Workflow
+
+The primary workflow is named **BATMAN PAPER TRADE** and supports both scheduled execution and manual `workflow_dispatch`. A companion mark workflow runs every 10 minutes while open paper positions exist.
+
+Prospective statistics use only `prospective_valid=true` records. Manual diagnostics are retained but excluded from validation counts.
