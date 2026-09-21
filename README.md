@@ -62,7 +62,8 @@ The locked MC-RQ6-v1 strategy now has a separate prospective-validation layer:
 
 [Prospective validation hub](research/prospective_validation/README.md)  
 [Prospective protocol](research/prospective_validation/PROTOCOL.md)  
-[Setup and data-source configuration](research/prospective_validation/SETUP.md)
+[Setup and data-source configuration](research/prospective_validation/SETUP.md)  
+[Data-provider audit](research/prospective_validation/DATA_PROVIDER_AUDIT.md)
 
 ### Operational workflows
 
