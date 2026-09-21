@@ -2,7 +2,7 @@ name: BATMAN PAPER TRADE
 
 on:
   schedule:
-    - cron: "*/5 4-10 * * 1-5"
+    - cron: "30,35,40 4 * * 1-5"
   workflow_dispatch:
     inputs:
       mode:
