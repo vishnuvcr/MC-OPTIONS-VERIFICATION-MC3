@@ -19,6 +19,6 @@
 | 5.1 | Manuscript | DONE | Complete RQ-6 manuscript, supplement and figures committed. |
 | 5.2 | Control lock | DONE | MC-RQ6-v1 is the traceable control for future margin-reduction research. |
 | PV-0 | Prospective design | DONE | Added clean automated paper-trading validation layer; no-live-order rule locked. |
-| PV-1 | Implementation | IN PROGRESS | Core engine, provider adapters, append-only logs, Pages site and manual/scheduled workflows added on prospective branch. |
+| PV-1 | Implementation | DONE | Core engine, provider adapters, append-only logs, Pages site and manual/scheduled workflows added. |\n| PV-2 | Hardening | DONE | Manual diagnostics cannot create prospective trades; D3 capture window, live-mark cadence, cost accounting, lot-size provenance and expiry-day closure were hardened. |\n| PV-3 | Validation harness handoff | READY | Branch is ready for review/merge; SENSEX requires a configured attributable live option-chain adapter before live prospective observations are accepted. |
 
 *External-original BATMAN provenance remains unresolved.
