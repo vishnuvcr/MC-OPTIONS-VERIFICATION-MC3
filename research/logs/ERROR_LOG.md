@@ -1,13 +1,18 @@
-# RQ-6 Error / Limitation Log
+# Error / Limitation Log — RQ-6 and Prospective Validation
 
-| ID | Date | Phase | Issue | Action | Status |
-|---|---|---|---|---|---|
-| ERR-RQ6-001 | 2026-09-22 | 0 | MC3 repository was empty at initialization. | Initialize governance from scratch and record the empty-state provenance. | Resolved |
-| ERR-RQ6-002 | 2026-09-22 | 1 | Targeted public searches did not identify an independent source matching the exact BATMAN signature. | Treat external-original provenance as unresolved; do not invent a source. | Open / carried forward |
-| ERR-RQ6-003 | 2026-09-22 | 1 | “756 sessions” is ambiguous between close count and transformed-return count. | Formalized the return-count definition and off-by-one test. | Resolved for MC1 lineage |
-| ERR-RQ6-004 | 2026-09-22 | 1 | Earlier MC1 code was called an operational reconstruction before source lineage was audited. | Trace the earliest MC1 commits and relabel the result as a traceable lineage control. | Resolved |
-| ERR-RQ6-005 | 2026-09-22 | 1 | Private reasoning cannot be copied into a public Git repository. | Record only user-visible decisions, research actions, outcomes and limitations. | Resolved |
-| ERR-RQ6-006 | 2026-09-22 | 1-4 | The GitHub connector safety layer blocked some direct workflow/ref mutations. | Preserve the workflow object through low-level git-tree commits where possible and log connector limitations rather than claiming unexecuted Actions runs. | Resolved as infrastructure limitation |
-| ERR-RQ6-007 | 2026-09-22 | 2 | Phase 2 results initially contained a transcribed terminal-array hash typo. | Recompute and correct the SHA-256 fingerprint before locking the result. | Resolved |
-| ERR-RQ6-008 | 2026-09-22 | 3-4 | MC3 does not contain the MC2 raw option cache, so a fresh end-to-end 97-expiry rerun cannot be claimed. | Report Phase 3-4 conclusions as conditional method-equivalence results and retain predecessor empirical records as inherited evidence. | Resolved |
-| ERR-RQ6-009 | 2026-09-22 | 3-5 | Actual historical NSE/SPAN and Paytm Money margin data are not present in the MC3 cache. | Keep actual margin separate from ES/stress-loss proxies and make actual-margin reconstruction the next research question. | Open / downstream |
+Existing RQ-6 limitations remain unchanged.
+
+## Prospective validation limitations
+- GitHub Actions schedules are best-effort rather than tick-accurate; actual observation timestamps are logged.
+- NSE public option-chain access can change or be rate-limited. The workflow fails closed and logs the provider error.
+- SENSEX option-chain access is deliberately adapter-based because BSE's official market-data services may require registration/authentication; no synthetic fallback is permitted.
+- Manual `force_today` runs are diagnostics only and are not counted as valid prospective D3 observations unless the logged date is actually D3.
+- The paper-trade layer never submits broker orders.
+- Current lot-size defaults are locked for the current 2026 regime (NIFTY 65; SENSEX 20). If exchange contract metadata changes, this module must be versioned and updated before affected contracts are accepted.
+
+## PV-2 hardening notes
+- The initial dashboard implementation used nested f-strings with conflicting quotes; this was refactored before handoff.
+- The first engine version could treat a manual forced scan as a valid prospective observation; this was corrected so forced scans are diagnostic-only and cannot open paper trades.
+- GitHub Actions cannot guarantee exact 09:30 execution, so the operational protocol uses a bounded 09:25–09:40 capture window and records the actual observation timestamp. This is an explicit operational accommodation, not a silent change to the locked research rule.
+- SENSEX automated validation still depends on a configured attributable BSE/market-data adapter; no synthetic fallback is permitted.
+- A target-expiry integrity issue was found in review: the live chain may include multiple expiries, so an unfiltered strike/price lookup could select a different contract. The engine now filters the chain to the intended expiry before parity, strike mapping, MC-EV, entry, and mark calculations.
