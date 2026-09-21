@@ -31,3 +31,6 @@ Decisions recorded:
 \n## Target-expiry integrity correction\nThe live chain can contain multiple expiries. All signal and mark calculations are now restricted to the selected contract expiry to prevent cross-expiry quote contamination.\n
 ## Schedule refinement
 D3 scan automation is now limited to three scheduled observations around the 09:30 IST target. Live marks run every 10 minutes through the 15:40 IST derivatives session close, based on current exchange timing references.
+
+## Instrument-specific live marking
+SENSEX and NIFTY use separate derivatives-session close boundaries. Post-close manual/scheduled attempts are logged as MARK_SKIP rather than using stale prices.\n
