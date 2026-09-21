@@ -2,7 +2,7 @@ name: BATMAN PAPER TRADE — LIVE MARK
 
 on:
   schedule:
-    - cron: "*/10 4-10 * * 1-5"
+    - cron: "*/10 4-9 * * 1-5"\n    - cron: "30,40 10 * * 1-5"
   workflow_dispatch:
     inputs:
       underlying:
