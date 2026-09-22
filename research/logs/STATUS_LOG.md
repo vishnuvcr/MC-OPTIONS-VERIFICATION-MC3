@@ -38,3 +38,5 @@
 | PV-13 | Unofficial SENSEX online adapter | DONE | Added automatic SENSEX retrieval through the third-party indiaopt BSEClient path (scrip 999920), retained explicit normalized-feed override, provenance metadata, normalization tests, and fail-closed behavior. |
 
 | PV-14 | Live provider recovery | DONE | Replaced retired NIFTY endpoint path with current unofficial indiaopt NSE adapter; added unofficial bse-options fallback for SENSEX; retained fail-closed and provenance rules. |
+
+| PV-14 | Live provider recovery | DONE | Replaced retired NIFTY endpoint path with current unofficial indiaopt NSE adapter; added unofficial bse-options fallback for SENSEX; retained fail-closed and provenance rules. |
