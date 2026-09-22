@@ -135,28 +135,32 @@ def fetch_nse_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
 
 
 def fetch_sensex_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
+    # Explicit normalized adapter remains an override for users who have a
+    # broker/vendor feed. Otherwise use the online unofficial BSE adapter.
     url = os.environ.get("BSE_OPTION_CHAIN_URL", "").strip()
-    if not url:
-        raise RuntimeError("SENSEX live option-chain adapter is not configured; set BSE_OPTION_CHAIN_URL")
-    token = os.environ.get("PAYTM_MONEY_JWT_TOKEN", "").strip()
-    headers = {"Accept": "application/json", "User-Agent": "BATMAN-Prospective-Validation/1.0"}
-    if token:
-        headers["x-jwt-token"] = token
-    r = requests.get(url, headers=headers, timeout=20)
-    r.raise_for_status()
-    data = r.json()
-    rows = data.get("rows") if isinstance(data, dict) else data
-    if not isinstance(rows, list):
-        raise ValueError(
-            "BSE_OPTION_CHAIN_URL must return a JSON list or {'rows': [...]} "
-            "with strike/option_type/ltp/bid/ask/expiry"
-        )
-    meta = {
-        "source": "CONFIGURED_SENSEX_CHAIN_ADAPTER",
-        "url": url,
-        "timestamp": datetime.utcnow().isoformat() + "Z",
-    }
-    return pd.DataFrame(rows), meta
+    if url:
+        token = os.environ.get("PAYTM_MONEY_JWT_TOKEN", "").strip()
+        headers = {"Accept": "application/json", "User-Agent": "BATMAN-Prospective-Validation/1.0"}
+        if token:
+            headers["x-jwt-token"] = token
+        r = requests.get(url, headers=headers, timeout=20)
+        r.raise_for_status()
+        data = r.json()
+        rows = data.get("rows") if isinstance(data, dict) else data
+        if not isinstance(rows, list):
+            raise ValueError(
+                "BSE_OPTION_CHAIN_URL must return a JSON list or {'rows': [...]} "
+                "with strike/option_type/ltp/bid/ask/expiry"
+            )
+        meta = {
+            "source": "CONFIGURED_SENSEX_CHAIN_ADAPTER",
+            "url": url,
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+        }
+        return pd.DataFrame(rows), meta
+
+    from .bse_online import fetch_sensex_chain_indiaopt
+    return fetch_sensex_chain_indiaopt()
 
 
 def live_chain(underlying: str) -> tuple[pd.DataFrame, dict[str, Any]]:
