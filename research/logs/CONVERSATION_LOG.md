@@ -42,3 +42,13 @@ A UTC/IST conversion error in the D3 GitHub Actions cron was found during final 
 User clarified the core objective: reduce total trading capital/margin by changing parameters, while retaining all previous research phases and producing a combined manuscript. A new research was started at Phase 1 in the same repository.
 
 Paytm Money application setup was initiated. Trading API and Live Broadcast were selected. The app-registration form did not save with loopback IP values and gave no explicit error. Decision: do not guess IPs; use a controlled fixed-IP HTTPS callback service for automated authentication. The research remains paper-only and will not place live orders.
+## RQ-7 GitHub-only decision — 2026-09-22
+User requested a free implementation using GitHub. Decision:
+- GitHub Actions runs authenticated read-only Paytm probes.
+- GitHub Actions Secrets store credentials/tokens.
+- GitHub Pages remains the publication layer.
+- No AWS/Lightsail/VPS is required by default.
+- The official Paytm SDK manual request-token bootstrap remains user-assisted.
+- No live order endpoint is used.
+- A manual GitHub workflow and deterministic read-only probe were committed on the RQ-7 Phase 1 branch.
+- A paid/fixed-IP callback service will only be introduced if Paytm's current authentication requirements empirically force that dependency.
