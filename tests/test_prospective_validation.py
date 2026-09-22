@@ -16,10 +16,14 @@ def test_mc_deterministic_shape():
 
 def test_unique_strikes_lower_tie_break():
     chain=pd.DataFrame([
+        {"strike":95,"option_type":"PE","ltp":1.0},
         {"strike":100,"option_type":"PE","ltp":1.0},
         {"strike":110,"option_type":"PE","ltp":1.0},
+        {"strike":115,"option_type":"PE","ltp":1.0},
+        {"strike":95,"option_type":"CE","ltp":1.0},
         {"strike":100,"option_type":"CE","ltp":1.0},
         {"strike":110,"option_type":"CE","ltp":1.0},
+        {"strike":115,"option_type":"CE","ltp":1.0},
     ])
     got=choose_unique_strikes(chain,{"P20_PE":105,"P35_PE":105,"P65_CE":105,"P80_CE":105})
     assert got["P20_PE"]==100
