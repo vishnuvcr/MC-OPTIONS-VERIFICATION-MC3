@@ -32,4 +32,8 @@ Enable **Settings → Pages → Build and deployment → Source: GitHub Actions*
 
 ## SENSEX data
 
-The default SENSEX path intentionally fails closed unless `BSE_OPTION_CHAIN_URL` is configured to an attributable JSON feed containing at least `expiry`, `strike`, `option_type`, `ltp`, `bid`, and `ask`. The official BSE market-data service is subscription/registration based, so no unofficial scraping fallback is silently enabled.
+The default SENSEX path uses the unofficial online `indiaopt` BSEClient adapter with scrip `999920`; `BSE_OPTION_CHAIN_URL` remains an explicit higher-priority override. No manual daily download is required. The unofficial provider is research-grade indicative data, not authoritative broker/exchange execution data. Public documentation shows BSE SENSEX option-chain access through `BSEClient.fetch_option_chain()`. citeturn3search0turn0search3
+
+
+## SENSEX online provider
+No SENSEX secret is required for the default path. Provider failures are logged and fail closed. Bid/ask may be unavailable from the public result, in which case the engine uses its existing LTP fallback with the locked 2-point adverse slippage.
