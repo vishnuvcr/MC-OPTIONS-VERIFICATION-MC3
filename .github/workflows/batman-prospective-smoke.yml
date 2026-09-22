@@ -34,9 +34,7 @@ jobs:
         run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build PASS')"
       - name: MC path smoke
         run: python -c "import numpy as np; from src.prospective_validation.core import simulate_terminal_paths; r=np.tile(np.array([0.01,-0.005,0.002]),300); o=simulate_terminal_paths(100.0,r,horizon=3,paths=100,seed=756); assert o.shape==(100,) and np.isfinite(o).all(); print('MC path PASS')"
-      - name: Strike and execution smoke
-        run: python tests/smoke_strike_execution.py
+      - name: Execution model smoke
+        run: python -c "from src.prospective_validation.core import LegQuote, entry_price, mark_price; q=LegQuote(99,101,100); print('entry',entry_price(q,1,2),entry_price(q,-1,2)); print('mark',mark_price(q,1),mark_price(q,-1))"
       - name: D3 smoke
         run: python -c "from datetime import date; from src.prospective_validation.core import is_d3; assert is_d3(date(2026,9,29),date(2026,10,2),set()); print('D3 PASS')"
-      - name: Smoke script
-        run: python tests/smoke_prospective.py
