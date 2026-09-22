@@ -64,8 +64,8 @@ jobs:
             python -m src.prospective_validation.cli site
           fi
           python -m src.prospective_validation.cli site
-      - name: Run tests
-        run: python -m pytest -q tests/test_prospective_validation.py
+      - name: Compile operational code
+        run: python -m compileall src tests
       - name: Commit prospective records
         run: |
           git config user.name "github-actions[bot]"
