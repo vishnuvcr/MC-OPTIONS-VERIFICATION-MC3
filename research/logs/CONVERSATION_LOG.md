@@ -36,3 +36,9 @@ D3 scan automation is now limited to three scheduled observations around the 09:
 SENSEX and NIFTY use separate derivatives-session close boundaries. Post-close manual/scheduled attempts are logged as MARK_SKIP rather than using stale prices.\n
 ## Final operational handoff correction
 A UTC/IST conversion error in the D3 GitHub Actions cron was found during final validation and corrected to 04:00/04:05/04:10 UTC, corresponding to 09:30/09:35/09:40 IST. The successful deployment smoke run 35700840566 verified the current package/import/dashboard/MC/D3 stack before this schedule-only correction.
+
+
+## PV-13 — user-approved unofficial SENSEX data
+User decision: proceed with unofficial SENSEX data so the prospective validation can retrieve SENSEX option-chain data online without a daily manual download.
+
+Implementation: default to the public third-party indiaopt BSEClient path for SENSEX scrip 999920; keep an explicitly configured normalized BSE feed as a higher-priority override; preserve no-live-order and fail-closed rules; record provider provenance in every accepted snapshot.
