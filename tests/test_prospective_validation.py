@@ -75,6 +75,10 @@ def test_indiaopt_nifty_normalization():
         strike = 25000
         call_ltp = 125.0
         put_ltp = 95.0
+        call_bid = 124.5
+        call_ask = 125.5
+        put_bid = 94.5
+        put_ask = 95.5
         call_oi = 100
         put_oi = 200
 
@@ -88,4 +92,6 @@ def test_indiaopt_nifty_normalization():
     chain, meta = _normalise_payload(Result(), "UNOFFICIAL_INDIAOPT_NSE", "indiaopt", "NIFTY")
     assert len(chain) == 2
     assert set(chain["option_type"]) == {"CE", "PE"}
+    assert float(chain.loc[chain["option_type"]=="CE","bid"].iloc[0]) == 124.5
+    assert float(chain.loc[chain["option_type"]=="PE","ask"].iloc[0]) == 95.5
     assert meta["source"] == "UNOFFICIAL_INDIAOPT_NSE"
