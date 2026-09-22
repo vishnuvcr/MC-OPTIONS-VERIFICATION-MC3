@@ -50,3 +50,7 @@ User reported the Pages dashboard showing NIFTY HTTP 404 and SENSEX invalid JSON
 
 ## PV-14 — rectify live provider failures
 User reported the Pages dashboard showing NIFTY HTTP 404 and SENSEX invalid JSON. Investigation identified the NIFTY legacy endpoint as retired; SENSEX indiaopt was reaching BSE but receiving non-JSON content. Rectification branch replaces NIFTY with current indiaopt NSE retrieval and adds bse-options as a second unofficial SENSEX provider. No synthetic data or live orders are permitted.
+
+
+## PV-15 — user-reported live dashboard regression
+The user supplied the post-PV-14 Pages error screen showing a new SENSEX NameError and NIFTY indiaopt normalization failure. This establishes that the prior smoke test verified imports/deployment structure but did not exercise the actual provider result shape. Decision: treat this as a new provider-runtime phase, fix the adapter and add object-result regression tests before accepting a prospective observation.
