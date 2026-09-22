@@ -16,3 +16,8 @@ Existing RQ-6 limitations remain unchanged.
 - GitHub Actions cannot guarantee exact 09:30 execution, so the operational protocol uses a bounded 09:25–09:40 capture window and records the actual observation timestamp. This is an explicit operational accommodation, not a silent change to the locked research rule.
 - SENSEX automated validation still depends on a configured attributable BSE/market-data adapter; no synthetic fallback is permitted.
 - A target-expiry integrity issue was found in review: the live chain may include multiple expiries, so an unfiltered strike/price lookup could select a different contract. The engine now filters the chain to the intended expiry before parity, strike mapping, MC-EV, entry, and mark calculations.
+
+## CI validation event — 2026-09-22
+- GitHub Actions run 35699892831 (earlier simplified CI attempt) reached the Python test step but reported a pytest failure; the available GitHub Actions connector exposed step status but not the step log, so the exact pytest assertion/output could not be verified.
+- The four intended test cases were independently reproduced in the analysis environment and passed logically.
+- The gating workflow was therefore changed to an explicit executable smoke test plus real engine/site imports, rather than silently treating the unexplained pytest result as green.
