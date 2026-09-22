@@ -77,7 +77,7 @@ Primary records are stored under `data/paper/`. No workflow in this module submi
 
 ### Current provider-recovery status
 
-PV-15 is in progress after the first post-PV-14 live scan exposed two runtime adapter defects: a missing SENSEX router import and failure to normalize indiaopt's structured `OptionChainResult` rows. No prospective trade is accepted from these failed observations. The fixes and regression tests are being validated on `phase-pv-15-provider-normalization-fix` before merge.
+PV-15 is complete at the code-validation level. The first post-PV-14 live scan exposed two runtime adapter defects: a missing SENSEX router import and failure to normalize indiaopt's structured `OptionChainResult` rows. Both were corrected and smoke run 35758524492 passed. The next live scan remains the required end-to-end provider-connectivity check; no failed observation is converted into a prospective trade.
 
 ## Governance logs
 
