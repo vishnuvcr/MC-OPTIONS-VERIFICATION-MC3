@@ -1,6 +1,7 @@
 name: Prospective Validation CI
 
 on:
+  push:
   pull_request:
   workflow_dispatch:
 
@@ -15,3 +16,5 @@ jobs:
       - run: pip install -r requirements-prospective.txt
       - run: python -m compileall src tests
       - run: pytest -q tests/test_prospective_validation.py
+      - name: Parse workflow YAML
+        run: ruby -e 'require "yaml"; Dir[".github/workflows/*.yml"].each { |f| YAML.load_file(f); puts "YAML OK: #{f}" }'
