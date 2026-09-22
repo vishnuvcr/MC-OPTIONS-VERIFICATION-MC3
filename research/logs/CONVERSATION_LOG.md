@@ -54,3 +54,7 @@ User reported the Pages dashboard showing NIFTY HTTP 404 and SENSEX invalid JSON
 
 ## PV-15 — user-reported live dashboard regression
 The user supplied the post-PV-14 Pages error screen showing a new SENSEX NameError and NIFTY indiaopt normalization failure. This establishes that the prior smoke test verified imports/deployment structure but did not exercise the actual provider result shape. Decision: treat this as a new provider-runtime phase, fix the adapter and add object-result regression tests before accepting a prospective observation.
+
+
+## PV-15 validation result
+The corrected branch passed GitHub Actions smoke run 35758524492, including the SENSEX live-router import and indiaopt-style object-result normalization. No prospective observation is accepted yet from the failed 2026-09-22 scan; the next live scan is required to verify actual exchange/provider connectivity.
