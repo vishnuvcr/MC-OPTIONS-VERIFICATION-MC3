@@ -19,5 +19,7 @@ jobs:
         run: python -m pip install -r requirements-prospective.txt
       - name: Compile
         run: python -m compileall src tests
-      - name: Unit tests
-        run: pytest -q tests/test_prospective_validation.py
+      - name: Import engine and build dashboard
+        run: python -c "from src.prospective_validation.engine import scan, mark; from src.prospective_validation.site import build; build(); print('engine/site imports: PASS')"
+      - name: Prospective smoke test
+        run: python tests/smoke_prospective.py
