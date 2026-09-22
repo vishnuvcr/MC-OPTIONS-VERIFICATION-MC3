@@ -15,7 +15,15 @@ If valid session JWTs already exist, also add:
 
 Never paste these values into ChatGPT, issues, commits or normal workflow inputs.
 
-## 2. Request-token bootstrap
+## 2. Verify the API key is actually available to GitHub Actions
+
+Before running the Paytm API call, run the workflow once. The first step now explicitly checks `PAYTM_MONEY_API_KEY` and `PAYTM_MONEY_API_SECRET` and prints only `AVAILABLE`/an error. It never prints the values.
+
+If the workflow says `PAYTM_MONEY_API_KEY is NOT configured`, the secret has not been created in the repository/environment visible to this workflow.
+
+If the workflow says `AVAILABLE`, GitHub has injected the secret into the Python process and the next step is the actual Paytm authentication/API call.
+
+## 3. Request-token bootstrap
 
 The official Paytm Money Python SDK documents: PMClient(api_secret, api_key), pm.login(state_key), browser authentication, request_token, then pm.generate_session(request_token).
 
@@ -23,13 +31,13 @@ For the GitHub-only architecture, the request token may be placed temporarily in
 
 The probe never prints the request token or generated JWTs.
 
-## 3. Run the workflow
+## 4. Run the workflow
 
 Actions -> RQ-7 Phase 1 — Paytm Money GitHub-Only Read-Only Probe -> Run workflow.
 
 The workflow installs the official SDK, performs the authenticated user-details call, reports only a response hash and status, and makes no order request.
 
-## 4. Next phase
+## 5. Next phase
 
 After user-details connectivity succeeds, Phase 2 will add read-only probes for security master, NIFTY option chain, SENSEX option chain, live option quote, historical option candle, scrip margin, order margin and charges.
 
