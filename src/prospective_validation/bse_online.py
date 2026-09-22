@@ -204,3 +204,8 @@ def fetch_sensex_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
                 f"indiaopt={type(first).__name__}: {first}; "
                 f"bse-options={type(second).__name__}: {second}"
             ) from second
+
+
+# Backward-compatible test/helper name retained for existing provider-normalisation tests.
+def normalize_indiaopt_result(result: Any, scrip: str = SENSEX_SCRIP) -> tuple[pd.DataFrame, dict[str, Any]]:
+    return _normalise_payload(result, "UNOFFICIAL_INDIAOPT_BSE", "indiaopt", scrip)
