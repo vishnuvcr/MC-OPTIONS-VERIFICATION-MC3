@@ -1,0 +1,38 @@
+name: RQ-7 Phase 1 — Paytm Authority Audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  phase1-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify RQ-7 research package
+        run: |
+          test -f research/rq7_margin/RESEARCH_PLAN.md
+          test -f research/rq7_margin/PHASE1_AUTHORITY_MATRIX.md
+          test -f research/rq7_margin/PHASE1_RESULTS.md
+          test -f research/rq7_margin/SETUP.md
+          test -f research/rq7_margin/CALLBACK_DEPLOYMENT.md
+
+      - name: Verify paper-only guard remains documented
+        run: |
+          grep -q "paper-only" research/rq7_margin/RESEARCH_PLAN.md
+          grep -q "Never enable live order submission" research/rq7_margin/RESEARCH_PLAN.md
+
+      - name: Scan tracked text for obvious credential placeholders
+        run: |
+          if git grep -nE '(api[_-]?secret|merchant[_-]?secret|access[_-]?token|public[_-]?access[_-]?token|read[_-]?access[_-]?token)[[:space:]]*[:=][[:space:]]*["'\''"][^"'\'']{12,}' -- ':!research/rq7_margin/SETUP.md' ':!research/rq7_margin/CALLBACK_DEPLOYMENT.md'; then
+            echo "Potential credential material found in tracked files."
+            exit 1
+          fi
+
+      - name: Report phase
+        run: |
+          echo "RQ-7 Phase 1 authority package validated."
+          echo "Authenticated margin capture remains a Phase 2 gate."
