@@ -107,3 +107,16 @@ The next research question should therefore focus on actual entry and peak capit
 - phase-4-rq6-walkforward-revalidation
 - phase-5-rq6-manuscript-lock
 - prospective-validation-batman-paper-trade
+
+
+## RQ-7 — Actual capital / margin reduction
+
+A separate research has now started from Phase 1 in this same repository, retaining all RQ-6 and prospective-validation history. The objective is specifically to reduce total trading capital/margin by changing strategy parameters, using attributable broker/exchange margin rather than risk proxies.
+
+- [RQ-7 research hub](research/rq7_margin/README.md)
+- [RQ-7 research plan](research/rq7_margin/RESEARCH_PLAN.md)
+- [RQ-7 Phase 1 authority matrix](research/rq7_margin/PHASE1_AUTHORITY_MATRIX.md)
+- [RQ-7 Phase 1 results](research/rq7_margin/PHASE1_RESULTS.md)
+- [RQ-7 Paytm setup](research/rq7_margin/SETUP.md)
+
+**RQ-7 Phase 1:** authority recovery complete with open authenticated-validation items. Paytm's official SDK documents live option streaming and scrip/order margin capabilities, but historical actual broker margin has not yet been established. No margin-reduction claim is made.
