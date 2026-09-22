@@ -19,6 +19,15 @@
 | 5.1 | Manuscript | DONE | Complete RQ-6 manuscript, supplement and figures committed. |
 | 5.2 | Control lock | DONE | MC-RQ6-v1 is the traceable control for future margin-reduction research. |
 | PV-0 | Prospective design | DONE | Added clean automated paper-trading validation layer; no-live-order rule locked. |
-| PV-1 | Implementation | DONE | Core engine, provider adapters, append-only logs, Pages site and manual/scheduled workflows added. |\n| PV-2 | Hardening | DONE | Manual diagnostics cannot create prospective trades; D3 capture window, live-mark cadence, cost accounting, lot-size provenance and expiry-day closure were hardened. |\n| PV-3 | Validation harness handoff | READY | Branch is ready for review/merge; SENSEX requires a configured attributable live option-chain adapter before live prospective observations are accepted. |
+| PV-1 | Implementation | DONE | Core engine, provider adapters, append-only logs, Pages site and manual/scheduled workflows added. |
+| PV-2 | Hardening | DONE | Manual diagnostics cannot create prospective trades; D3 capture window, live-mark cadence, cost accounting, lot-size provenance and expiry-day closure were hardened. |
+| PV-3 | Validation harness handoff | READY | Branch is ready for review/merge; SENSEX requires a configured attributable live option-chain adapter before live prospective observations are accepted. |
 
 *External-original BATMAN provenance remains unresolved.
+
+| PV-4 | Target-expiry integrity review | DONE | Live strike selection, MC gate pricing, entry quotes and marks are explicitly filtered to the intended contract expiry. |
+| PV-5 | Merge | DONE | Prospective validation workflows and Pages publisher were merged into main; no live-order endpoint is included. |
+| PV-6 | Data-provider audit | DONE | NIFTY public NSE adapter documented; SENSEX provider boundary and fail-closed rule documented; broker-market-data credentials remain optional. |
+| PV-7 | Schedule lock | DONE | D3 scan schedule narrowed to 09:30–09:40 IST capture runs; live marks use the configured instrument close. |
+| PV-8 | Instrument-specific marking | DONE | SENSEX marks stop at its derivatives-session boundary; NIFTY marks continue through the NSE derivatives close. |
+| PV-9 | CI hardening | IN PROGRESS | CI is being changed to run on pushes so the merged operational code receives an actual Actions test result. |
