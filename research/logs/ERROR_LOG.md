@@ -23,3 +23,5 @@ Existing RQ-6 limitations remain unchanged.
 - The gating workflow was therefore changed to an explicit executable smoke test plus real engine/site imports, rather than silently treating the unexplained pytest result as green.
 
 - Operational workflow policy: the scheduled/manual BATMAN PAPER TRADE workflow now performs compilation only and does not gate data persistence on the separate pytest suite. The dedicated BATMAN Prospective Smoke workflow remains responsible for executable validation.
+
+- Test-fixture correction: the original smoke/test chain had only two strikes per side, making the four-leg globally-unique strike requirement impossible. This caused the strike smoke and earlier pytest suite to fail; the fixture now supplies four strikes per side and asserts all four selected strikes.
