@@ -25,3 +25,8 @@ Existing RQ-6 limitations remain unchanged.
 - Operational workflow policy: the scheduled/manual BATMAN PAPER TRADE workflow now performs compilation only and does not gate data persistence on the separate pytest suite. The dedicated BATMAN Prospective Smoke workflow remains responsible for executable validation.
 
 - Test-fixture correction: the original smoke/test chain had only two strikes per side, making the four-leg globally-unique strike requirement impossible. This caused the strike smoke and earlier pytest suite to fail; the fixture now supplies four strikes per side and asserts all four selected strikes.
+
+## D3 scheduling correction — 2026-09-22
+- A UTC-to-IST conversion error was found in the scheduled BATMAN PAPER TRADE cron. The original `30,35,40 4 * * 1-5` meant 10:00–10:10 IST, not 09:30–09:40 IST.
+- Corrected schedule: `0,5,10 4 * * 1-5`, corresponding to 09:30, 09:35 and 09:40 IST.
+- This did not affect the frozen strategy rule itself; it was an automation scheduling defect. The correction is logged explicitly to prevent recurrence.
