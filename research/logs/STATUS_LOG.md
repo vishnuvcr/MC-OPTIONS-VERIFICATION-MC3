@@ -30,4 +30,5 @@
 | PV-6 | Data-provider audit | DONE | NIFTY public NSE adapter documented; SENSEX provider boundary and fail-closed rule documented; broker-market-data credentials remain optional. |
 | PV-7 | Schedule lock | DONE | D3 scan schedule narrowed to 09:30–09:40 IST capture runs; live marks use the configured instrument close. |
 | PV-8 | Instrument-specific marking | DONE | SENSEX marks stop at its derivatives-session boundary; NIFTY marks continue through the NSE derivatives close. |
-| PV-9 | CI hardening | DONE | CI runs on pushes and now gates on explicit package imports, dashboard generation, compilation and an executable prospective smoke test. |
+| PV-9 | CI hardening | DONE | A dedicated BATMAN Prospective Smoke workflow gates executable validation; operational paper runs are not blocked by the separate pytest suite. |
+| PV-10 | Operational test isolation | DONE | Scheduled/manual paper-trade runs persist signals/events independently of the historical pytest suite; compile and smoke workflows are separate. |
