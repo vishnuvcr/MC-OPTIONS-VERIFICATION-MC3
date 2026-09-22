@@ -29,29 +29,30 @@ jobs:
       - name: Build dashboard
         run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build: PASS')"
       - name: Core math
-        run: python - <<'PY'
-import numpy as np
-import pandas as pd
-from datetime import date
-from src.prospective_validation.core import LegQuote, simulate_terminal_paths, choose_unique_strikes, entry_price, mark_price, is_d3
-r=np.tile(np.array([0.01,-0.005,0.002]),300)
-out=simulate_terminal_paths(100.0,r,horizon=3,paths=100,seed=756)
-assert out.shape == (100,) and np.isfinite(out).all()
-chain=pd.DataFrame([
-    {"strike":100,"option_type":"PE","ltp":1.0},
-    {"strike":110,"option_type":"PE","ltp":1.0},
-    {"strike":100,"option_type":"CE","ltp":1.0},
-    {"strike":110,"option_type":"CE","ltp":1.0},
-])
-got=choose_unique_strikes(chain,{"P20_PE":105,"P35_PE":105,"P65_CE":105,"P80_CE":105})
-assert got["P20_PE"] == 100 and got["P35_PE"] == 110
-q=LegQuote(99,101,100)
-assert entry_price(q,1,2) == (103.0,"ask_plus_slippage")
-assert entry_price(q,-1,2) == (97.0,"bid_minus_slippage")
-assert mark_price(q,1) == (99,"bid")
-assert mark_price(q,-1) == (101,"ask")
-assert is_d3(date(2026,9,29),date(2026,10,2),set())
-print("core math: PASS")
-PY
+        run: |
+          python - <<'PY'
+          import numpy as np
+          import pandas as pd
+          from datetime import date
+          from src.prospective_validation.core import LegQuote, simulate_terminal_paths, choose_unique_strikes, entry_price, mark_price, is_d3
+          r=np.tile(np.array([0.01,-0.005,0.002]),300)
+          out=simulate_terminal_paths(100.0,r,horizon=3,paths=100,seed=756)
+          assert out.shape == (100,) and np.isfinite(out).all()
+          chain=pd.DataFrame([
+              {"strike":100,"option_type":"PE","ltp":1.0},
+              {"strike":110,"option_type":"PE","ltp":1.0},
+              {"strike":100,"option_type":"CE","ltp":1.0},
+              {"strike":110,"option_type":"CE","ltp":1.0},
+          ])
+          got=choose_unique_strikes(chain,{"P20_PE":105,"P35_PE":105,"P65_CE":105,"P80_CE":105})
+          assert got["P20_PE"] == 100 and got["P35_PE"] == 110
+          q=LegQuote(99,101,100)
+          assert entry_price(q,1,2) == (103.0,"ask_plus_slippage")
+          assert entry_price(q,-1,2) == (97.0,"bid_minus_slippage")
+          assert mark_price(q,1) == (99,"bid")
+          assert mark_price(q,-1) == (101,"ask")
+          assert is_d3(date(2026,9,29),date(2026,10,2),set())
+          print("core math: PASS")
+          PY
       - name: Smoke script
         run: python tests/smoke_prospective.py
