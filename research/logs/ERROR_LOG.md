@@ -30,3 +30,11 @@ Existing RQ-6 limitations remain unchanged.
 - A UTC-to-IST conversion error was found in the scheduled BATMAN PAPER TRADE cron. The original `30,35,40 4 * * 1-5` meant 10:00–10:10 IST, not 09:30–09:40 IST.
 - Corrected schedule: `0,5,10 4 * * 1-5`, corresponding to 09:30, 09:35 and 09:40 IST.
 - This did not affect the frozen strategy rule itself; it was an automation scheduling defect. The correction is logged explicitly to prevent recurrence.
+
+
+## PV-13 — unofficial SENSEX online provider — 2026-09-22
+- The configured-only SENSEX adapter would have prevented automatic prospective SENSEX observations without a user-supplied feed URL.
+- Decision: add the unofficial indiaopt BSEClient path as the default online provider, while retaining BSE_OPTION_CHAIN_URL as an explicit override.
+- This provider is not authoritative exchange data. All SENSEX observations from it are tagged UNOFFICIAL_INDIAOPT_BSE and stored with provider metadata.
+- Bid/ask may be absent. The engine therefore uses its existing LTP fallback plus 2-point adverse slippage; this is logged as a data-quality limitation rather than hidden.
+- Provider failure remains fail-closed: no synthetic option quote and no paper entry from unavailable data.

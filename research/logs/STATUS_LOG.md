@@ -34,3 +34,5 @@
 | PV-10 | Operational test isolation | DONE | Scheduled/manual paper-trade runs persist signals/events independently of the historical pytest suite; compile and smoke workflows are separate. |
 | PV-11 | Smoke-gate simplification | DONE | Remote smoke gate reduced to deterministic deployment checks; detailed regression scripts remain in the repository but do not block operational signal persistence. Run 35700840566 passed all deployment smoke checks. |
 | PV-12 | D3 cron correction | DONE | Corrected GitHub Actions cron from 04:30–04:40 UTC to 04:00–04:10 UTC, matching 09:30–09:40 IST. Run 35701905449 is validating the corrected revision. |
+
+| PV-13 | Unofficial SENSEX online adapter | DONE | Added automatic SENSEX retrieval through the third-party indiaopt BSEClient path (scrip 999920), retained explicit normalized-feed override, provenance metadata, normalization tests, and fail-closed behavior. |
