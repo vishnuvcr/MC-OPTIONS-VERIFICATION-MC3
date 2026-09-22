@@ -105,4 +105,5 @@ The next research question should therefore focus on actual entry and peak capit
 - phase-2-rq6-exact-reconstruction-final
 - phase-3-rq6-baseline-revalidation
 - phase-4-rq6-walkforward-revalidation
-- phase-5-rq6-manuscript-lock\n- prospective-validation-batman-paper-trade
+- phase-5-rq6-manuscript-lock
+- prospective-validation-batman-paper-trade
