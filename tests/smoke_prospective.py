@@ -21,10 +21,14 @@ def main() -> None:
     assert np.isfinite(out).all()
 
     chain = pd.DataFrame([
+        {"strike": 95, "option_type": "PE", "ltp": 1.0},
         {"strike": 100, "option_type": "PE", "ltp": 1.0},
         {"strike": 110, "option_type": "PE", "ltp": 1.0},
+        {"strike": 115, "option_type": "PE", "ltp": 1.0},
+        {"strike": 95, "option_type": "CE", "ltp": 1.0},
         {"strike": 100, "option_type": "CE", "ltp": 1.0},
         {"strike": 110, "option_type": "CE", "ltp": 1.0},
+        {"strike": 115, "option_type": "CE", "ltp": 1.0},
     ])
     got = choose_unique_strikes(
         chain,
@@ -32,6 +36,8 @@ def main() -> None:
     )
     assert got["P20_PE"] == 100
     assert got["P35_PE"] == 110
+    assert got["P65_CE"] == 95
+    assert got["P80_CE"] == 115
 
     q = LegQuote(99, 101, 100)
     assert entry_price(q, 1, 2) == (103, "ask_plus_slippage")
