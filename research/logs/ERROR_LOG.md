@@ -30,3 +30,10 @@ Existing RQ-6 limitations remain unchanged.
 - A UTC-to-IST conversion error was found in the scheduled BATMAN PAPER TRADE cron. The original `30,35,40 4 * * 1-5` meant 10:00–10:10 IST, not 09:30–09:40 IST.
 - Corrected schedule: `0,5,10 4 * * 1-5`, corresponding to 09:30, 09:35 and 09:40 IST.
 - This did not affect the frozen strategy rule itself; it was an automation scheduling defect. The correction is logged explicitly to prevent recurrence.
+
+
+## RQ-7 Phase 1 — Paytm application registration — 2026-09-22
+- The Paytm app form accepted the localhost callback format for testing but did not save the application when 127.0.0.1 was entered as both Primary IP and Secondary IP. No explicit validation message was displayed.
+- Earlier guidance to duplicate 127.0.0.1 in both IP fields was therefore not accepted as evidence and must not be repeated.
+- Resolution: do not invent alternate loopback IPs. Production automation requires a real controlled server with an attributable public IPv4 and HTTPS callback if Paytm's allowlisting requires it.
+- This is an external deployment dependency, not a research-method change. The Phase 1 architecture and security boundary are now recorded in research/rq7_margin/SETUP.md.
