@@ -11,6 +11,9 @@ A current public open-source project demonstrates automated BSE SENSEX option-ch
 ## Paytm Money
 Paytm Money documentation exposes authenticated market-data APIs. The prospective module keeps a credential boundary for a broker-grade market-data adapter, but no live broker order endpoint is called.
 
+## PV-15 correction
+The first live PV-14 scan exposed that indiaopt returns a structured OptionChainResult object with row attributes such as strike/call_ltp/put_ltp. The adapter has now been expanded to normalize that documented object shape as well as dict/list payloads. The SENSEX router import is also explicitly smoke-tested.
+
 ## Decision
 For prospective validation, data provenance takes priority over silently filling gaps. The SENSEX provider order is: configured normalized feed if supplied, otherwise unofficial indiaopt online retrieval; provider failure is logged as unavailable rather than replaced with synthetic or inferred prices. Accepted observations store provider/version/scrip/expiry provenance.
 

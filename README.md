@@ -75,6 +75,10 @@ Primary records are stored under `data/paper/`. No workflow in this module submi
 
 **SENSEX note:** automatic prospective validation now retrieves SENSEX online through the unofficial indiaopt BSEClient adapter (scrip 999920) by default, with an explicit normalized BSE feed override. Every such observation is tagged with unofficial-provider provenance; failures remain fail-closed and no live broker order is submitted. [Provider audit](research/prospective_validation/DATA_PROVIDER_AUDIT.md)
 
+### Current provider-recovery status
+
+PV-15 is complete at the code-validation level. The first post-PV-14 live scan exposed two runtime adapter defects: a missing SENSEX router import and failure to normalize indiaopt's structured `OptionChainResult` rows. Both were corrected and smoke run 35758524492 passed. The next live scan remains the required end-to-end provider-connectivity check; no failed observation is converted into a prospective trade.
+
 ## Governance logs
 
 [Status log](research/logs/STATUS_LOG.md)  

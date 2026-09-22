@@ -26,12 +26,36 @@ jobs:
         run: python -c "from src.prospective_validation import core; print('core import PASS')"
       - name: Import costs
         run: python -c "from src.prospective_validation import costs; print('costs import PASS')"
-      - name: Import engine
-        run: python -c "from src.prospective_validation.engine import scan, mark; print('engine import PASS')"
+      - name: Import engine and live router
+        run: python -c "from src.prospective_validation.engine import scan, mark; from src.prospective_validation.market import live_chain; print('engine/router import PASS')"
       - name: Import site
         run: python -c "from src.prospective_validation.site import build; print('site import PASS')"
       - name: Build dashboard
         run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build PASS')"
+      - name: Provider normalization smoke
+        run: |
+          python - <<'PY'
+          from src.prospective_validation.bse_online import normalize_indiaopt_result
+          class Row:
+              strike = 25000
+              call_ltp = 125.0
+              put_ltp = 95.0
+              call_bid = 124.5
+              call_ask = 125.5
+              put_bid = 94.5
+              put_ask = 95.5
+          class Result:
+              data = [Row()]
+              expiry = "2026-10-01"
+              spot_price = 25010.0
+          chain, meta = normalize_indiaopt_result(Result(), scrip="NIFTY")
+          assert len(chain) == 2
+          assert set(chain["option_type"]) == {"CE", "PE"}
+          assert float(chain.loc[chain["option_type"] == "CE", "bid"].iloc[0]) == 124.5
+          assert float(chain.loc[chain["option_type"] == "PE", "ask"].iloc[0]) == 95.5
+          assert meta["scrip"] == "NIFTY"
+          print("provider normalization PASS")
+          PY
       - name: MC path smoke
         run: python -c "import numpy as np; from src.prospective_validation.core import simulate_terminal_paths; r=np.tile(np.array([0.01,-0.005,0.002]),300); o=simulate_terminal_paths(100.0,r,horizon=3,paths=100,seed=756); assert o.shape==(100,) and np.isfinite(o).all(); print('MC path PASS')"
       - name: Execution model smoke

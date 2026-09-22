@@ -40,3 +40,5 @@
 | PV-14 | Live provider recovery | DONE | Replaced retired NIFTY endpoint path with current unofficial indiaopt NSE adapter; added unofficial bse-options fallback for SENSEX; retained fail-closed and provenance rules. |
 
 | PV-14 | Live provider recovery | DONE | Replaced retired NIFTY endpoint path with current unofficial indiaopt NSE adapter; added unofficial bse-options fallback for SENSEX; retained fail-closed and provenance rules. |
+
+| PV-15 | Provider normalization correction | DONE | Live dashboard exposed two code defects after PV-14: SENSEX router import was missing, and indiaopt OptionChainResult object rows were not normalized because the adapter only handled dict/list payloads. Both were corrected on a dedicated branch; smoke run 35758524492 passed compile, router import, dashboard build and provider-object normalization checks. |

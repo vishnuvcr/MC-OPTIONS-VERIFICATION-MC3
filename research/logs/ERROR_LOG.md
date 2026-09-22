@@ -71,3 +71,23 @@ Rectification:
 - Detection: GitHub Actions smoke failed at engine import with `ImportError: cannot import name 'live_chain'`.
 - Rectification: restored the router and kept provider selection isolated inside `market.py`.
 - Prevention: future provider edits must preserve and smoke-test the public market adapter surface before merge.
+
+
+## PV-15 — live-scan regression exposed after PV-14 — 2026-09-22
+Observed in the user's Pages error ledger after the PV-14 merge:
+- SENSEX: NameError: name 'fetch_sensex_chain' is not defined. Cause: the restored live_chain router referenced the provider function without importing it in that branch of market.py.
+- NIFTY: RuntimeError from indiaopt saying it returned no recognisable SENSEX option rows. The provider reached indiaopt, but the normalizer expected dict/list rows and did not unwrap the OptionChainResult.data object rows. The error text also incorrectly hard-coded SENSEX.
+
+Rectification:
+- Import fetch_sensex_chain locally in the SENSEX router branch.
+- Normalize object-based indiaopt results and call_ltp/put_ltp row fields, including optional bid/ask.
+- Make normalization errors exchange-neutral.
+- Add regression coverage for an indiaopt-style NIFTY object result and bid/ask fields.
+
+Prevention:
+- Provider adapters must be tested against both documented object-style result shapes and dict/list exchange payloads before live deployment.
+- The public live_chain router must be import-smoked whenever provider code changes.
+
+
+## PV-15 validation — 2026-09-22
+GitHub Actions smoke run 35758524492 passed after the PV-15 corrections. The new provider-normalization test and live-router import smoke both succeeded. This validates the code path and documented indiaopt result-shape handling; it does not by itself prove that NSE/BSE will permit a fresh live chain fetch on the next scheduled scan.
