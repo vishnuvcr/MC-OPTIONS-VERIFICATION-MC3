@@ -38,3 +38,8 @@ The user-provided Zero IP broker-API catalogue was inspected. The visible suppor
 ## 2026-09-22 — Stable/true egress IP obtained
 
 User reports that a true/stable egress IP has now been obtained. This removes the immediate uncertainty around the availability of a fixed source IP, but Paytm allowlisting and end-to-end API connectivity remain to be empirically verified. The IP value itself is not recorded in the repository or chat. Next validation: configure the Paytm Money app Primary IP with the obtained stable egress IP, keep Secondary IP blank unless a second stable IP is intentionally provisioned, then perform the GitHub/Python read-only connectivity test. Zero IP is not assumed to be the provider unless independently confirmed.
+
+
+## 2026-09-22 — Paytm portal rejects stable IPv6 as Primary IP
+
+The Paytm developer portal displayed “Invalid primary IP address format (must be valid IPv4 or IPv6)” for the user's entered stable IPv6 address. The address is syntactically a valid IPv6 form, so this is evidence of a portal validation/compatibility issue rather than proof that the supplied address is malformed. Next diagnostic is to obtain/use a dedicated public IPv4 egress address if available, because Paytm's portal may be enforcing an IPv4-compatible validation path despite the displayed IPv4/IPv6 wording. No credentials or IP value are stored in the repository.
