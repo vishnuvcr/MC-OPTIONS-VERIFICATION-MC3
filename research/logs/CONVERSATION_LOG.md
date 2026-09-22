@@ -36,3 +36,9 @@ D3 scan automation is now limited to three scheduled observations around the 09:
 SENSEX and NIFTY use separate derivatives-session close boundaries. Post-close manual/scheduled attempts are logged as MARK_SKIP rather than using stale prices.\n
 ## Final operational handoff correction
 A UTC/IST conversion error in the D3 GitHub Actions cron was found during final validation and corrected to 04:00/04:05/04:10 UTC, corresponding to 09:30/09:35/09:40 IST. The successful deployment smoke run 35700840566 verified the current package/import/dashboard/MC/D3 stack before this schedule-only correction.
+
+
+## RQ-7 actual capital/margin research — 2026-09-22
+User clarified the core objective: reduce total trading capital/margin by changing parameters, while retaining all previous research phases and producing a combined manuscript. A new research was started at Phase 1 in the same repository.
+
+Paytm Money application setup was initiated. Trading API and Live Broadcast were selected. The app-registration form did not save with loopback IP values and gave no explicit error. Decision: do not guess IPs; use a controlled fixed-IP HTTPS callback service for automated authentication. The research remains paper-only and will not place live orders.
