@@ -13,7 +13,8 @@ import requests
 IST = "Asia/Kolkata"
 ROOT = Path(__file__).resolve().parents[2]
 CACHE_ROOT = ROOT / "data" / "paper" / "market_cache"
-NSE_URL = "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
+NSE_URL = "https://www.nseindia.com/api/option-chain-v3"
+NSE_CONTRACT_URL = "https://www.nseindia.com/api/option-chain-contract-info"
 NSE_HOME = "https://www.nseindia.com"
 
 
@@ -96,71 +97,12 @@ def fetch_yahoo_daily(ticker: str, years: int = 5) -> pd.Series:
 
 
 def fetch_nse_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
-    s = _session()
-    try:
-        s.get(NSE_HOME, timeout=10)
-        r = s.get(NSE_URL, timeout=15)
-        r.raise_for_status()
-        data = r.json()
-    except Exception:
-        r = s.get(NSE_URL, timeout=15)
-        r.raise_for_status()
-        data = r.json()
-
-    rows = []
-    rec = data.get("records", {})
-    for item in rec.get("data", []):
-        strike = item.get("strikePrice")
-        expiry = item.get("expiryDate")
-        for typ in ("CE", "PE"):
-            leg = item.get(typ) or {}
-            rows.append({
-                "strike": strike,
-                "expiry": expiry,
-                "option_type": typ,
-                "ltp": leg.get("lastPrice"),
-                "bid": leg.get("bidprice"),
-                "ask": leg.get("askPrice"),
-                "volume": leg.get("totalTradedVolume"),
-                "oi": leg.get("openInterest"),
-            })
-    if not rows:
-        raise ValueError("NSE option chain returned no rows")
-    meta = {
-        "source": "NSE_PUBLIC_OPTION_CHAIN",
-        "expiry_dates": rec.get("expiryDates", []),
-        "timestamp": rec.get("timestamp"),
-    }
-    return pd.DataFrame(rows), meta
+    # NSE retired the legacy option-chain-indices endpoint. Use the current
+    # unofficial indiaopt adapter, which uses browser impersonation/retries.
+    from .bse_online import fetch_nifty_chain
+    return fetch_nifty_chain()
 
 
-def fetch_sensex_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
-    # Explicit normalized adapter remains an override for users who have a
-    # broker/vendor feed. Otherwise use the online unofficial BSE adapter.
-    url = os.environ.get("BSE_OPTION_CHAIN_URL", "").strip()
-    if url:
-        token = os.environ.get("PAYTM_MONEY_JWT_TOKEN", "").strip()
-        headers = {"Accept": "application/json", "User-Agent": "BATMAN-Prospective-Validation/1.0"}
-        if token:
-            headers["x-jwt-token"] = token
-        r = requests.get(url, headers=headers, timeout=20)
-        r.raise_for_status()
-        data = r.json()
-        rows = data.get("rows") if isinstance(data, dict) else data
-        if not isinstance(rows, list):
-            raise ValueError(
-                "BSE_OPTION_CHAIN_URL must return a JSON list or {'rows': [...]} "
-                "with strike/option_type/ltp/bid/ask/expiry"
-            )
-        meta = {
-            "source": "CONFIGURED_SENSEX_CHAIN_ADAPTER",
-            "url": url,
-            "timestamp": datetime.utcnow().isoformat() + "Z",
-        }
-        return pd.DataFrame(rows), meta
-
-    from .bse_online import fetch_sensex_chain_indiaopt
-    return fetch_sensex_chain_indiaopt()
 
 
 def live_chain(underlying: str) -> tuple[pd.DataFrame, dict[str, Any]]:

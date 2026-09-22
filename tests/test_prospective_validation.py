@@ -68,3 +68,24 @@ def test_indiaopt_sensex_normalization():
     assert chain["expiry"].notna().all()
     assert float(chain.loc[chain["option_type"]=="CE","ltp"].iloc[0]) == 210.5
     assert meta["source"] == "UNOFFICIAL_INDIAOPT_BSE"
+
+
+def test_indiaopt_nifty_normalization():
+    class Row:
+        strike = 25000
+        call_ltp = 125.0
+        put_ltp = 95.0
+        call_oi = 100
+        put_oi = 200
+
+    class Result:
+        data = [Row()]
+        expiry = "2026-10-01"
+        spot_price = 25010.0
+        fetched_at = "2026-09-22T09:30:00+05:30"
+
+    from src.prospective_validation.bse_online import _normalise_payload
+    chain, meta = _normalise_payload(Result(), "UNOFFICIAL_INDIAOPT_NSE", "indiaopt", "NIFTY")
+    assert len(chain) == 2
+    assert set(chain["option_type"]) == {"CE", "PE"}
+    assert meta["source"] == "UNOFFICIAL_INDIAOPT_NSE"
