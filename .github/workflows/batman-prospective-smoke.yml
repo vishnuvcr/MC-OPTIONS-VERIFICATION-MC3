@@ -19,15 +19,15 @@ jobs:
       - name: Compile source
         run: python -m compileall src tests
       - name: Import core
-        run: python -c "from src.prospective_validation import core; print('core import: PASS')"
+        run: python -c "from src.prospective_validation import core; print('core import PASS')"
       - name: Import costs
-        run: python -c "from src.prospective_validation import costs; print('costs import: PASS')"
+        run: python -c "from src.prospective_validation import costs; print('costs import PASS')"
       - name: Import engine
-        run: python -c "from src.prospective_validation.engine import scan, mark; print('engine import: PASS')"
+        run: python -c "from src.prospective_validation.engine import scan, mark; print('engine import PASS')"
       - name: Import site
-        run: python -c "from src.prospective_validation.site import build; print('site import: PASS')"
+        run: python -c "from src.prospective_validation.site import build; print('site import PASS')"
       - name: Build dashboard
-        run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build: PASS')"
+        run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build PASS')"
       - name: Core math
         run: |
           python - <<'PY'
