@@ -42,3 +42,8 @@ Existing RQ-6 limitations remain unchanged.
 - The architecture was revised so GitHub Actions is the primary authenticated read-only execution environment.
 - The paid VPS is removed from the default plan.
 - The remaining limitation is Paytm's initial browser authentication/request-token bootstrap and any current requirement for a permanent allowlisted callback. This must be tested rather than assumed.
+
+## RQ-7 Phase 1 — TrueIP IPv6 allowlist limitation — 2026-09-22
+- The current TrueIP account is provisioned with dedicated IPv6 egress. The Paytm developer portal rejects the corresponding Primary IP entry with an IP-format error even though the address is structurally valid IPv6.
+- Current TrueIP public documentation indicates that dedicated IPv4 is available separately for brokers/platforms that require IPv4. Therefore the next diagnostic is a dedicated stable public IPv4, not another invented IPv6/loopback value.
+- The screenshot exposed proxy usernames and egress addresses. These must be treated as credentials/secrets and must not be committed, logged, or pasted into chat. Rotate/revoke the exposed proxy credentials before production use.
