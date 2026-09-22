@@ -39,5 +39,25 @@
   ],
   "slippage_points_per_leg": 2,
   "mark_interval_minutes": 10,
-  "no_live_order_submission": true
+  "no_live_order_submission": true,
+  "d3_capture_window_ist": [
+    "09:25:00",
+    "09:40:00"
+  ],
+  "market_close_ist": {
+    "NIFTY": "15:40:00",
+    "SENSEX": "15:30:00"
+  },
+  "costs": {
+    "slippage_points_per_leg": 2,
+    "brokerage_per_order_default_rupees": 20,
+    "brokerage_override_env": "PAYTM_MONEY_BROKERAGE_PER_ORDER",
+    "stt_sale_rate_from_2026_04_01": 0.0015,
+    "stt_exercise_rate_from_2026_04_01": 0.0015
+  },
+  "providers": {
+    "NIFTY_live": "NSE_PUBLIC_OPTION_CHAIN",
+    "SENSEX_live": "CONFIGURED_SENSEX_CHAIN_ADAPTER",
+    "historical_index_cache": "Yahoo chart endpoint cached in data/paper/market_cache"
+  }
 }
