@@ -69,7 +69,7 @@ The locked MC-RQ6-v1 strategy now has a separate prospective-validation layer:
 
 - **BATMAN PAPER TRADE** — scheduled D3 scanning, signal logging, gate-controlled paper entry, append-only records and GitHub Pages publication.
 - **BATMAN PAPER TRADE — LIVE MARK** — 10-minute live MTM updates and expiry-day closure.
-- **Prospective Validation CI** — syntax and unit-test gate for the module.
+- **BATMAN Prospective Smoke** — executable package, MC-path, strike, execution, D3 and dashboard smoke checks.
 
 Primary records are stored under `data/paper/`. No workflow in this module submits live broker orders.
 
