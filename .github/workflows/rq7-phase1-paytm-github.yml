@@ -13,19 +13,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Check required GitHub Secrets are available
+        env:
+          PAYTM_MONEY_API_KEY: ${{ secrets.PAYTM_MONEY_API_KEY }}
+          PAYTM_MONEY_API_SECRET: ${{ secrets.PAYTM_MONEY_API_SECRET }}
+        run: |
+          test -n "$PAYTM_MONEY_API_KEY" || { echo "::error::PAYTM_MONEY_API_KEY is NOT configured in GitHub Settings → Secrets and variables → Actions."; exit 1; }
+          test -n "$PAYTM_MONEY_API_SECRET" || { echo "::error::PAYTM_MONEY_API_SECRET is NOT configured in GitHub Settings → Secrets and variables → Actions."; exit 1; }
+          echo "PAYTM_MONEY_API_KEY=AVAILABLE"
+          echo "PAYTM_MONEY_API_SECRET=AVAILABLE"
+          echo "Secret values are intentionally not displayed."
+
       - name: Install Paytm Money Python SDK
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements-paytm.txt
+
       - name: Compile and test
         run: |
           python -m py_compile src/paytm_money/client.py
           python -m py_compile src/rq7_margin/paytm_github_probe.py
           python -m pytest -q tests/test_paytm_money_client.py
+
       - name: Run authenticated read-only probe
         env:
           PAYTM_MONEY_API_KEY: ${{ secrets.PAYTM_MONEY_API_KEY }}
@@ -36,8 +51,10 @@ jobs:
           PAYTM_MONEY_READ_ACCESS_TOKEN: ${{ secrets.PAYTM_MONEY_READ_ACCESS_TOKEN }}
         run: |
           PYTHONPATH=src python src/rq7_margin/paytm_github_probe.py
+
       - name: Paper-only source guard
         run: |
           ! git grep -nE 'place_order\(|modify_order\(|cancel_order\(' -- src/paytm_money src/rq7_margin
+
       - name: Report
         run: echo "RQ-7 Paytm Money Python integration completed; live orders are disabled."
