@@ -46,3 +46,7 @@ Implementation: default to the public third-party indiaopt BSEClient path for SE
 
 ## PV-14 — rectify live provider failures
 User reported the Pages dashboard showing NIFTY HTTP 404 and SENSEX invalid JSON. Investigation identified the NIFTY legacy endpoint as retired; SENSEX indiaopt was reaching BSE but receiving non-JSON content. Rectification branch replaces NIFTY with current indiaopt NSE retrieval and adds bse-options as a second unofficial SENSEX provider. No synthetic data or live orders are permitted.
+
+
+## PV-14 — rectify live provider failures
+User reported the Pages dashboard showing NIFTY HTTP 404 and SENSEX invalid JSON. Investigation identified the NIFTY legacy endpoint as retired; SENSEX indiaopt was reaching BSE but receiving non-JSON content. Rectification branch replaces NIFTY with current indiaopt NSE retrieval and adds bse-options as a second unofficial SENSEX provider. No synthetic data or live orders are permitted.
