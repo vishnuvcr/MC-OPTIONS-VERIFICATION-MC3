@@ -37,3 +37,8 @@ Existing RQ-6 limitations remain unchanged.
 - Earlier guidance to duplicate 127.0.0.1 in both IP fields was therefore not accepted as evidence and must not be repeated.
 - Resolution: do not invent alternate loopback IPs. Production automation requires a real controlled server with an attributable public IPv4 and HTTPS callback if Paytm's allowlisting requires it.
 - This is an external deployment dependency, not a research-method change. The Phase 1 architecture and security boundary are now recorded in research/rq7_margin/SETUP.md.
+## RQ-7 Phase 1 — GitHub-only revision — 2026-09-22
+- The user explicitly requested a free GitHub-based implementation.
+- The architecture was revised so GitHub Actions is the primary authenticated read-only execution environment.
+- The paid VPS is removed from the default plan.
+- The remaining limitation is Paytm's initial browser authentication/request-token bootstrap and any current requirement for a permanent allowlisted callback. This must be tested rather than assumed.
