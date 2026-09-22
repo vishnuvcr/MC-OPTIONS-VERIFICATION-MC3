@@ -51,3 +51,16 @@ Rectification:
 - No synthetic quotes are introduced.
 - Provider provenance is recorded for accepted observations.
 - If all providers fail, the observation remains invalid and is retained in the error/signal ledger.
+
+
+## PV-14 — provider recovery after live failure — 2026-09-22
+Observed live scan failures:
+- NIFTY returned HTTP 404 from the legacy `/api/option-chain-indices` endpoint. Current 2026 research references identify the endpoint as retired and the current flow as `option-chain-contract-info` plus `option-chain-v3`; the public NSE page remains available. citeturn9search6turn9search3
+- SENSEX `indiaopt` reached BSE but received non-JSON content, so the provider correctly failed closed.
+
+Rectification:
+- NIFTY now uses the current `indiaopt` NSE adapter rather than the retired endpoint.
+- SENSEX keeps `indiaopt` first, then tries the separate unofficial `bse-options` package as a second provider.
+- No synthetic quotes are introduced.
+- Provider provenance is recorded for accepted observations.
+- If all providers fail, the observation remains invalid and is retained in the error/signal ledger.
