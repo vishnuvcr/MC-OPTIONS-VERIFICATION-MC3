@@ -30,6 +30,20 @@ def _version(package: str) -> str:
 
 
 def _normalise_records(rows: Any, expiry: Any = None) -> list[dict[str, Any]]:
+    """Normalize dict/list/object option-chain rows to the engine schema.
+
+    indiaopt returns an OptionChainResult object whose data rows expose fields
+    such as strike, call_ltp and put_ltp rather than nested CE/PE dictionaries.
+    """
+    if rows is None:
+        return []
+
+    if not isinstance(rows, (dict, list, tuple)):
+        nested = _field(rows, "data", "records", "filtered", "option_chain", "chain", "rows")
+        if nested is not None and nested is not rows:
+            return _normalise_records(nested, expiry)
+        rows = [rows]
+
     if isinstance(rows, dict):
         for key in ("data", "records", "filtered", "option_chain", "chain", "rows"):
             if key in rows:
@@ -37,48 +51,69 @@ def _normalise_records(rows: Any, expiry: Any = None) -> list[dict[str, Any]]:
                 if isinstance(nested, dict) and key == "filtered":
                     nested = nested.get("data", nested)
                 return _normalise_records(nested, expiry or rows.get("expiry"))
-        # A single strike record can itself be a mapping.
         if "strikePrice" in rows or "strike" in rows:
-            return [rows]
-        return []
+            rows = [rows]
+        else:
+            return []
 
     if not isinstance(rows, (list, tuple)):
         return []
 
     out: list[dict[str, Any]] = []
     for row in rows:
-        if isinstance(row, dict):
-            strike = _field(row, "strikePrice", "strike", "strike_price")
-            if strike is not None:
-                ce = _field(row, "CE", "ce", "call", "CALL") or {}
-                pe = _field(row, "PE", "pe", "put", "PUT") or {}
-                for typ, leg in (("CE", ce), ("PE", pe)):
-                    if not isinstance(leg, dict):
-                        leg = {}
-                    out.append({
-                        "strike": strike,
-                        "expiry": _field(leg, "expiryDate", "expiry", "expiry_date") or expiry,
-                        "option_type": typ,
-                        "ltp": _field(leg, "lastPrice", "ltp", "last_price"),
-                        "bid": _field(leg, "bid", "bidPrice", "bid_price"),
-                        "ask": _field(leg, "ask", "askPrice", "ask_price"),
-                        "volume": _field(leg, "volume", "totalTradedVolume", "total_traded_volume"),
-                        "oi": _field(leg, "openInterest", "oi", "open_interest"),
-                    })
-            else:
-                # Already one-leg-per-row schemas.
-                typ = str(_field(row, "option_type", "optionType", "type") or "").upper()
-                if typ in ("CE", "PE"):
-                    out.append({
-                        "strike": _field(row, "strikePrice", "strike", "strike_price"),
-                        "expiry": _field(row, "expiryDate", "expiry", "expiry_date") or expiry,
-                        "option_type": typ,
-                        "ltp": _field(row, "lastPrice", "ltp", "last_price"),
-                        "bid": _field(row, "bid", "bidPrice", "bid_price"),
-                        "ask": _field(row, "ask", "askPrice", "ask_price"),
-                        "volume": _field(row, "volume", "totalTradedVolume", "total_traded_volume"),
-                        "oi": _field(row, "openInterest", "oi", "open_interest"),
-                    })
+        strike = _field(row, "strikePrice", "strike", "strike_price")
+        if strike is None:
+            continue
+
+        row_expiry = _field(row, "expiryDate", "expiry", "expiry_date") or expiry
+        ce = _field(row, "CE", "ce", "call", "CALL")
+        pe = _field(row, "PE", "pe", "put", "PUT")
+
+        if ce is not None or pe is not None:
+            for typ, leg in (("CE", ce), ("PE", pe)):
+                leg = leg or {}
+                out.append({
+                    "strike": strike,
+                    "expiry": _field(leg, "expiryDate", "expiry", "expiry_date") or row_expiry,
+                    "option_type": typ,
+                    "ltp": _field(leg, "lastPrice", "ltp", "last_price"),
+                    "bid": _field(leg, "bid", "bidPrice", "bid_price"),
+                    "ask": _field(leg, "ask", "askPrice", "ask_price"),
+                    "volume": _field(leg, "volume", "totalTradedVolume", "total_traded_volume"),
+                    "oi": _field(leg, "openInterest", "oi", "open_interest"),
+                })
+            continue
+
+        # indiaopt-style rows: call_ltp / put_ltp and related fields.
+        for typ, prefix in (("CE", "call"), ("PE", "put")):
+            ltp = _field(row, f"{prefix}_ltp", f"{prefix}Ltp")
+            if ltp is None:
+                continue
+            out.append({
+                "strike": strike,
+                "expiry": row_expiry,
+                "option_type": typ,
+                "ltp": ltp,
+                "bid": _field(row, f"{prefix}_bid", f"{prefix}_bid_price", f"{prefix}Bid"),
+                "ask": _field(row, f"{prefix}_ask", f"{prefix}_ask_price", f"{prefix}Ask"),
+                "volume": _field(row, f"{prefix}_vol", f"{prefix}_volume"),
+                "oi": _field(row, f"{prefix}_oi", f"{prefix}_open_interest"),
+            })
+
+        # Already one-leg-per-row schema.
+        if not any(_field(row, f"{prefix}_ltp", f"{prefix}Ltp") is not None for prefix in ("call", "put")):
+            typ = str(_field(row, "option_type", "optionType", "type") or "").upper()
+            if typ in ("CE", "PE"):
+                out.append({
+                    "strike": strike,
+                    "expiry": row_expiry,
+                    "option_type": typ,
+                    "ltp": _field(row, "lastPrice", "ltp", "last_price"),
+                    "bid": _field(row, "bid", "bidPrice", "bid_price"),
+                    "ask": _field(row, "ask", "askPrice", "ask_price"),
+                    "volume": _field(row, "volume", "totalTradedVolume", "total_traded_volume"),
+                    "oi": _field(row, "openInterest", "oi", "open_interest"),
+                })
     return out
 
 
@@ -88,7 +123,7 @@ def _normalise_payload(payload: Any, source: str, provider: str, scrip: str) -> 
     fetched_at = _field(payload, "fetched_at", "timestamp", "lastUpdateTime")
     rows = _normalise_records(payload, expiry)
     if not rows:
-        raise ValueError(f"{provider} returned no recognisable SENSEX option rows")
+        raise ValueError(f"{provider} returned no recognisable option rows")
 
     out = pd.DataFrame(rows)
     out["expiry"] = pd.to_datetime(out["expiry"], errors="coerce").dt.normalize()
@@ -97,7 +132,7 @@ def _normalise_payload(payload: Any, source: str, provider: str, scrip: str) -> 
     out = out.dropna(subset=["strike", "ltp"])
     out = out[out["option_type"].isin(["CE", "PE"])]
     if out.empty:
-        raise ValueError(f"{provider} returned no usable SENSEX option prices")
+        raise ValueError(f"{provider} returned no usable option prices")
 
     meta = {
         "source": source,
