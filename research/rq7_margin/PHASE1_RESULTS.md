@@ -29,3 +29,7 @@ Proceed to Phase 2 using the GitHub-only architecture. First gate: authenticated
 Market-data attribution appears feasible, while actual margin attribution remains an empirical data-recovery problem. Risk proxies must not be relabeled as broker margin.
 
 No margin-reduction claim is made at Phase 1.
+
+## 2026-09-22 — Zero IP broker allowlist check
+
+The user-provided Zero IP broker-API catalogue was inspected. The visible supported broker list includes 5Paisa, Alice Blue, Dhan, Flattrade, Fyers, Groww, ICICIDirect, IIFL Securities, Kotak Securities (Neo), Upstox and Zerodha Kite; Paytm Money is not shown in the visible catalogue. Zero IP describes domain-locked egress, so the current evidence does not establish that a Zero IP tunnel can reach Paytm Money. Paytm Money's official API remains independently confirmed, including REST APIs and Python SDK support. Decision: do not enter the Zero IP address in Paytm's Primary IP field yet. Either verify that Zero IP can explicitly add Paytm Money API domains, obtain written support confirmation, or use a different stable-IP route.
