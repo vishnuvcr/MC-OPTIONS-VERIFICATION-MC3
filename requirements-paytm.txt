@@ -1,0 +1,3 @@
+# Paytm Money Trading/Open API
+# Official Python SDK
+ git+https://github.com/paytmmoney/pyPMClient.git
