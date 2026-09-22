@@ -38,3 +38,5 @@
 | RQ7-1.1 | RQ-7 Phase 1 | DONE | Paytm Money official portal and official SDK authority recovered; live option streaming, historical market data, scrip/order margin and charges capabilities identified. |
 | RQ7-1.2 | RQ-7 Phase 1 | DONE WITH OPEN ITEMS | Historical actual broker margin and exact current margin endpoint schemas remain to be validated with authenticated fixtures. |
 | RQ7-1.3 | RQ-7 Phase 1 | BLOCKED FOR AUTOMATED DEPLOYMENT | Paytm app registration did not save the loopback IP configuration; production requires an attributable fixed public IP/callback service rather than invented 127.x.x.x values. |
+| RQ7-1.3 | RQ-7 Phase 1 | REVISED | GitHub-only execution path added; paid VPS is no longer required by the research design. |
+| RQ7-1.4 | RQ-7 Phase 1 | READY FOR USER BOOTSTRAP | GitHub Actions workflow and read-only probe are committed. Awaiting user-side Paytm credentials/session bootstrap in GitHub Secrets. |
