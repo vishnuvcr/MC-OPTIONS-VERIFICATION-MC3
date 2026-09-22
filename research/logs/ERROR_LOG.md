@@ -87,3 +87,7 @@ Rectification:
 Prevention:
 - Provider adapters must be tested against both documented object-style result shapes and dict/list exchange payloads before live deployment.
 - The public live_chain router must be import-smoked whenever provider code changes.
+
+
+## PV-15 validation — 2026-09-22
+GitHub Actions smoke run 35758524492 passed after the PV-15 corrections. The new provider-normalization test and live-router import smoke both succeeded. This validates the code path and documented indiaopt result-shape handling; it does not by itself prove that NSE/BSE will permit a fresh live chain fetch on the next scheduled scan.
