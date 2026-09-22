@@ -34,3 +34,7 @@
 | PV-10 | Operational test isolation | DONE | Scheduled/manual paper-trade runs persist signals/events independently of the historical pytest suite; compile and smoke workflows are separate. |
 | PV-11 | Smoke-gate simplification | DONE | Remote smoke gate reduced to deterministic deployment checks; detailed regression scripts remain in the repository but do not block operational signal persistence. Run 35700840566 passed all deployment smoke checks. |
 | PV-12 | D3 cron correction | DONE | Corrected GitHub Actions cron from 04:30–04:40 UTC to 04:00–04:10 UTC, matching 09:30–09:40 IST. Run 35701905449 is validating the corrected revision. |
+
+| RQ7-1.1 | RQ-7 Phase 1 | DONE | Paytm Money official portal and official SDK authority recovered; live option streaming, historical market data, scrip/order margin and charges capabilities identified. |
+| RQ7-1.2 | RQ-7 Phase 1 | DONE WITH OPEN ITEMS | Historical actual broker margin and exact current margin endpoint schemas remain to be validated with authenticated fixtures. |
+| RQ7-1.3 | RQ-7 Phase 1 | BLOCKED FOR AUTOMATED DEPLOYMENT | Paytm app registration did not save the loopback IP configuration; production requires an attributable fixed public IP/callback service rather than invented 127.x.x.x values. |
