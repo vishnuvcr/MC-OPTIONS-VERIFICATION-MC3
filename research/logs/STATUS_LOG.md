@@ -36,3 +36,5 @@
 | PV-12 | D3 cron correction | DONE | Corrected GitHub Actions cron from 04:30–04:40 UTC to 04:00–04:10 UTC, matching 09:30–09:40 IST. Run 35701905449 is validating the corrected revision. |
 
 | PV-13 | Unofficial SENSEX online adapter | DONE | Added automatic SENSEX retrieval through the third-party indiaopt BSEClient path (scrip 999920), retained explicit normalized-feed override, provenance metadata, normalization tests, and fail-closed behavior. |
+
+| PV-14 | Live provider recovery | DONE | Replaced retired NIFTY endpoint path with current unofficial indiaopt NSE adapter; added unofficial bse-options fallback for SENSEX; retained fail-closed and provenance rules. |
