@@ -31,3 +31,5 @@ ES95/ES99, stress loss and drawdown are not actual broker/exchange margin.
 ## Phase 2 gate
 
 No margin-reduction claim will be made until attributable margin responses are captured and validated.
+
+- Callback deployment: CALLBACK_DEPLOYMENT.md
