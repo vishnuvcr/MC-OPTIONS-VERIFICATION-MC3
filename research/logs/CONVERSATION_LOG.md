@@ -52,3 +52,6 @@ User requested a free implementation using GitHub. Decision:
 - No live order endpoint is used.
 - A manual GitHub workflow and deterministic read-only probe were committed on the RQ-7 Phase 1 branch.
 - A paid/fixed-IP callback service will only be introduced if Paytm's current authentication requirements empirically force that dependency.
+
+## RQ-7 TrueIP diagnostic — 2026-09-22
+The user provided a TrueIP dashboard screenshot showing the current route is dedicated IPv6 egress with two provisioned IPv6 endpoints. This explains why the Paytm Primary IP field was being tested with IPv6. TrueIP's current public documentation states it also offers dedicated IPv4 for brokers/platforms that require it. Decision: stop retrying the rejected IPv6 value and obtain a stable public IPv4 if available. Security action: the screenshot exposed proxy usernames/egress details, so those credentials should be rotated/revoked and never stored in the repository.
