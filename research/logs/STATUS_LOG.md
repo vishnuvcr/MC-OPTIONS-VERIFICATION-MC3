@@ -32,3 +32,4 @@
 | PV-8 | Instrument-specific marking | DONE | SENSEX marks stop at its derivatives-session boundary; NIFTY marks continue through the NSE derivatives close. |
 | PV-9 | CI hardening | DONE | A dedicated BATMAN Prospective Smoke workflow gates executable validation; operational paper runs are not blocked by the separate pytest suite. |
 | PV-10 | Operational test isolation | DONE | Scheduled/manual paper-trade runs persist signals/events independently of the historical pytest suite; compile and smoke workflows are separate. |
+| PV-11 | Smoke-gate simplification | DONE | Remote smoke gate reduced to deterministic deployment checks; detailed regression scripts remain in the repository but do not block operational signal persistence. Current run 35700813492 is executing against the final workflow revision. |
