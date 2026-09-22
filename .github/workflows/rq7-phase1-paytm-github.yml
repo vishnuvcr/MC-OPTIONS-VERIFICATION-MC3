@@ -1,0 +1,39 @@
+name: RQ-7 Phase 1 — Paytm Money GitHub-Only Read-Only Probe
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paytm-read-only-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official Paytm Money SDK
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install git+https://github.com/paytmmoney/pyPMClient.git
+      - name: Compile probe
+        run: python -m py_compile src/rq7_margin/paytm_github_probe.py
+      - name: Run authenticated read-only probe
+        env:
+          PAYTM_MONEY_API_KEY: ${{ secrets.PAYTM_MONEY_API_KEY }}
+          PAYTM_MONEY_API_SECRET: ${{ secrets.PAYTM_MONEY_API_SECRET }}
+          PAYTM_MONEY_REQUEST_TOKEN: ${{ secrets.PAYTM_MONEY_REQUEST_TOKEN }}
+          PAYTM_MONEY_ACCESS_TOKEN: ${{ secrets.PAYTM_MONEY_ACCESS_TOKEN }}
+          PAYTM_MONEY_PUBLIC_ACCESS_TOKEN: ${{ secrets.PAYTM_MONEY_PUBLIC_ACCESS_TOKEN }}
+          PAYTM_MONEY_READ_ACCESS_TOKEN: ${{ secrets.PAYTM_MONEY_READ_ACCESS_TOKEN }}
+        run: python src/rq7_margin/paytm_github_probe.py
+      - name: Paper-only source guard
+        run: |
+          ! git grep -nE 'place_order\(|modify_order\(|cancel_order\(' -- src/rq7_margin/paytm_github_probe.py
+      - name: Report
+        run: echo 'RQ-7 GitHub-only read-only probe completed; no live order endpoint is part of this workflow.'
