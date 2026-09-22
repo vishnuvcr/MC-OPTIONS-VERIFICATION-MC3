@@ -13,3 +13,12 @@ Paytm Money documentation exposes authenticated market-data APIs. The prospectiv
 
 ## Decision
 For prospective validation, data provenance takes priority over silently filling gaps. Missing SENSEX live quotes are logged as unavailable rather than replaced with synthetic or inferred prices.
+
+## Current authoritative references reviewed — 2026-09-22
+
+- NSE F&O 2026 trading-holiday circular NSE/FAOP/71777: https://nsearchives.nseindia.com/content/circulars/FAOP71777.pdf
+- NSE F&O Jan 15, 2026 additional holiday circular NSE/FAOP/72262: https://nsearchives.nseindia.com/content/circulars/FAOP72262.pdf
+- NSE option settlement price: https://www.nseindia.com/static/products-services/equity-derivatives-settlement-price
+- NSE STT rates from Apr 1, 2026: https://www.nseindia.com/static/products-services/equity-derivatives-securities-transaction-tax
+- NSE equity-options transaction-charge circular FA73061: https://nsearchives.nseindia.com/content/circulars/FA73061.pdf
+- Paytm Money current F&O FAQ states Rs.10 per unique executed order, while Paytm Money's 2025 pricing announcement states flat Rs.20 across segments from Jan 15, 2025. Because public Paytm material is not internally consistent about the current account-specific rate, the validation engine keeps brokerage configurable rather than silently asserting a single universal live rate.
