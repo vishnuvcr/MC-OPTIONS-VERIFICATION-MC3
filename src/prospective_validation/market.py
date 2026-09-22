@@ -102,3 +102,12 @@ def fetch_nse_chain() -> tuple[pd.DataFrame, dict[str, Any]]:
     from .bse_online import fetch_nifty_chain
     return fetch_nifty_chain()
 
+
+
+
+def live_chain(underlying: str) -> tuple[pd.DataFrame, dict[str, Any]]:
+    if underlying == "NIFTY":
+        return fetch_nse_chain()
+    if underlying == "SENSEX":
+        return fetch_sensex_chain()
+    raise ValueError(underlying)
