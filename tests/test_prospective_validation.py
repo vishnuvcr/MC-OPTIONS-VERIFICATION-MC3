@@ -5,6 +5,7 @@ from src.prospective_validation.core import (
     simulate_terminal_paths, choose_unique_strikes, portfolio_mc_ev,
     entry_price, mark_price, is_d3
 )
+from src.prospective_validation.bse_online import normalize_indiaopt_result
 
 
 def test_mc_deterministic_shape():
@@ -45,3 +46,25 @@ def test_entry_and_mark_conventions():
 def test_d3_definition():
     h=set()
     assert is_d3(pd.Timestamp("2026-09-29").date(),pd.Timestamp("2026-10-02").date(),h)
+
+
+def test_indiaopt_sensex_normalization():
+    class Row:
+        strike = 81200
+        call_ltp = 210.5
+        put_ltp = 180.25
+        call_oi = 1000
+        put_oi = 1200
+
+    class Result:
+        data = [Row()]
+        expiry = "2026-10-01"
+        spot_price = 81234.5
+        fetched_at = "2026-09-22T09:30:00+05:30"
+
+    chain, meta = normalize_indiaopt_result(Result())
+    assert len(chain) == 2
+    assert set(chain["option_type"]) == {"CE", "PE"}
+    assert chain["expiry"].notna().all()
+    assert float(chain.loc[chain["option_type"]=="CE","ltp"].iloc[0]) == 210.5
+    assert meta["source"] == "UNOFFICIAL_INDIAOPT_BSE"
