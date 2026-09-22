@@ -8,6 +8,7 @@ The workflows require:
 ## Optional secrets
 For SENSEX or a preferred broker-grade market-data provider, configure:
 - `PAYTM_MONEY_JWT_TOKEN` for Paytm Money authenticated market-data adapters when enabled;
+- `PAYTM_MONEY_BROKERAGE_PER_ORDER` to override the default ₹20 research brokerage assumption with the actual account-specific rate;
 - `BSE_OPTION_CHAIN_URL` for an explicitly configured normalized BSE option-chain endpoint.
 
 The code never stores these secrets in the repository.
@@ -24,3 +25,11 @@ The live-mark workflow runs every 10 minutes on weekdays and is guarded by India
 - Paytm Money Open API: https://developer.paytmmoney.com/
 - Paytm Money historical minute market-data API: https://developer.paytmmoney.com/docs/api/historical-api-beta
 - BSE market-data service: https://marketdata.bseindia.com/
+
+## GitHub Pages
+
+Enable **Settings → Pages → Build and deployment → Source: GitHub Actions** once for the repository. The workflows already build and deploy the static portal.
+
+## SENSEX data
+
+The default SENSEX path intentionally fails closed unless `BSE_OPTION_CHAIN_URL` is configured to an attributable JSON feed containing at least `expiry`, `strike`, `option_type`, `ltp`, `bid`, and `ask`. The official BSE market-data service is subscription/registration based, so no unofficial scraping fallback is silently enabled.
