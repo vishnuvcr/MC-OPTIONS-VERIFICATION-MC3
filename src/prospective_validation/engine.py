@@ -15,7 +15,7 @@ from .core import (
 from .market import live_chain, fetch_yahoo_daily
 from .store import append_jsonl, open_positions, write_snapshot, now_utc
 
-from src.model.costs import enhanced_entry_costs, expiry_stt
+from .costs import enhanced_entry_costs, expiry_stt
 
 
 IST = "Asia/Kolkata"
