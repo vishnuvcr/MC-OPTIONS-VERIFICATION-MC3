@@ -34,16 +34,8 @@ jobs:
         run: python -c "from src.prospective_validation.site import build; build(); print('dashboard build PASS')"
       - name: MC path smoke
         run: python -c "import numpy as np; from src.prospective_validation.core import simulate_terminal_paths; r=np.tile(np.array([0.01,-0.005,0.002]),300); o=simulate_terminal_paths(100.0,r,horizon=3,paths=100,seed=756); assert o.shape==(100,) and np.isfinite(o).all(); print('MC path PASS')"
-      - name: Strike mapping smoke
-        run: python -c "import pandas as pd; from src.prospective_validation.core import choose_unique_strikes; c=pd.DataFrame([{'strike':100,'option_type':'PE','ltp':1.0},{'strike':110,'option_type':'PE','ltp':1.0},{'strike':100,'option_type':'CE','ltp':1.0},{'strike':110,'option_type':'CE','ltp':1.0}]); g=choose_unique_strikes(c,{'P20_PE':105,'P35_PE':105,'P65_CE':105,'P80_CE':105}); assert g['P20_PE']==100 and g['P35_PE']==110; print('strike mapping PASS')"
-      - name: Long entry smoke
-        run: python -c "from src.prospective_validation.core import LegQuote, entry_price; assert entry_price(LegQuote(99,101,100),1,2)==(103.0,'ask_plus_slippage'); print('long entry PASS')"
-      - name: Short entry smoke
-        run: python -c "from src.prospective_validation.core import LegQuote, entry_price; assert entry_price(LegQuote(99,101,100),-1,2)==(97.0,'bid_minus_slippage'); print('short entry PASS')"
-      - name: Long mark smoke
-        run: python -c "from src.prospective_validation.core import LegQuote, mark_price; assert mark_price(LegQuote(99,101,100),1)==(99.0,'bid'); print('long mark PASS')"
-      - name: Short mark smoke
-        run: python -c "from src.prospective_validation.core import LegQuote, mark_price; assert mark_price(LegQuote(99,101,100),-1)==(101.0,'ask'); print('short mark PASS')"
+      - name: Strike and execution smoke
+        run: python tests/smoke_strike_execution.py
       - name: D3 smoke
         run: python -c "from datetime import date; from src.prospective_validation.core import is_d3; assert is_d3(date(2026,9,29),date(2026,10,2),set()); print('D3 PASS')"
       - name: Smoke script
