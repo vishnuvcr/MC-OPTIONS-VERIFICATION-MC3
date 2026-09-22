@@ -73,7 +73,7 @@ The locked MC-RQ6-v1 strategy now has a separate prospective-validation layer:
 
 Primary records are stored under `data/paper/`. No workflow in this module submits live broker orders.
 
-**SENSEX note:** automatic prospective validation requires an attributable configured BSE/market-data option-chain adapter; the workflow fails closed instead of using synthetic prices.
+**SENSEX note:** automatic prospective validation now retrieves SENSEX online through the unofficial indiaopt BSEClient adapter (scrip 999920) by default, with an explicit normalized BSE feed override. Every such observation is tagged with unofficial-provider provenance; failures remain fail-closed and no live broker order is submitted. [Provider audit](research/prospective_validation/DATA_PROVIDER_AUDIT.md)
 
 ## Governance logs
 
