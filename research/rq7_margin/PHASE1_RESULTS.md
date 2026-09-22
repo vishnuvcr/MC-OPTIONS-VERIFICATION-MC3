@@ -43,3 +43,7 @@ User reports that a true/stable egress IP has now been obtained. This removes th
 ## 2026-09-22 — Paytm portal rejects stable IPv6 as Primary IP
 
 The Paytm developer portal displayed “Invalid primary IP address format (must be valid IPv4 or IPv6)” for the user's entered stable IPv6 address. The address is syntactically a valid IPv6 form, so this is evidence of a portal validation/compatibility issue rather than proof that the supplied address is malformed. Next diagnostic is to obtain/use a dedicated public IPv4 egress address if available, because Paytm's portal may be enforcing an IPv4-compatible validation path despite the displayed IPv4/IPv6 wording. No credentials or IP value are stored in the repository.
+
+2026-09-22 — TrueIP capability clarified
+
+The latest TrueIP dashboard screenshot shows that the currently provisioned route is dedicated IPv6 egress and provides two IPv6 egress addresses with separate proxy credentials. Current TrueIP public documentation also states that dedicated IPv4 is available as a paid option for platforms that require IPv4. This does not establish that Paytm accepts the current IPv6 allowlist path; the Paytm portal has already rejected the supplied IPv6 value. Decision: do not repeat the rejected IPv6 entry. The next diagnostic is a dedicated stable public IPv4 from the same controlled egress provider or another attributable provider. The screenshot exposed proxy usernames and egress addresses; these are not stored in the repository.
