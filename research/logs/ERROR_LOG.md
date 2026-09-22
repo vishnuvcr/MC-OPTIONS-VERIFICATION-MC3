@@ -21,3 +21,5 @@ Existing RQ-6 limitations remain unchanged.
 - GitHub Actions run 35699892831 (earlier simplified CI attempt) reached the Python test step but reported a pytest failure; the available GitHub Actions connector exposed step status but not the step log, so the exact pytest assertion/output could not be verified.
 - The four intended test cases were independently reproduced in the analysis environment and passed logically.
 - The gating workflow was therefore changed to an explicit executable smoke test plus real engine/site imports, rather than silently treating the unexplained pytest result as green.
+
+- Operational workflow policy: the scheduled/manual BATMAN PAPER TRADE workflow now performs compilation only and does not gate data persistence on the separate pytest suite. The dedicated BATMAN Prospective Smoke workflow remains responsible for executable validation.
