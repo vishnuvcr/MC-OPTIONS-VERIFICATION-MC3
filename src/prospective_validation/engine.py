@@ -212,59 +212,81 @@ def scan(underlying_filter: str = "BOTH", force_today: bool = False) -> None:
 
             positions = open_positions()
             already = any(p.get("signal_id") == signal_id for p in positions.values())
-            if ev > 0 and not already:
+
+            if ev <= 0:
+                sig["reason"] = "mc_ev_gate_fail"
+            elif already:
+                sig["reason"] = "paper_position_already_open"
+            else:
                 entry = {}
                 entry_sources = {}
                 quantities = {"P35_PE": 1, "P20_PE": -2, "P65_CE": 1, "P80_CE": -2}
+                try:
+                    for label, side, qty in [
+                        ("P35_PE", "PE", 1), ("P20_PE", "PE", -2),
+                        ("P65_CE", "CE", 1), ("P80_CE", "CE", -2)
+                    ]:
+                        ep, src = entry_price(best_quote(target_chain, side, strikes[label]), qty, SLIPPAGE)
+                        entry[label] = ep
+                        entry_sources[label] = src
 
-                for label, side, qty in [
-                    ("P35_PE", "PE", 1), ("P20_PE", "PE", -2),
-                    ("P65_CE", "CE", 1), ("P80_CE", "CE", -2)
-                ]:
-                    ep, src = entry_price(best_quote(target_chain, side, strikes[label]), qty, SLIPPAGE)
-                    entry[label] = ep
-                    entry_sources[label] = src
+                    lot, lot_source = _lot_size(underlying, expiry, target_chain)
+                    cost_model = enhanced_entry_costs(
+                        underlying=underlying,
+                        prices=entry,
+                        quantities=quantities,
+                        lot_size=lot,
+                        trade_date=pd.Timestamp(today),
+                    )
 
-                lot, lot_source = _lot_size(underlying, expiry, target_chain)
-                cost_model = enhanced_entry_costs(
-                    underlying=underlying,
-                    prices=entry,
-                    quantities=quantities,
-                    lot_size=lot,
-                    trade_date=pd.Timestamp(today),
-                )
-
-                pid = stable_id({"signal_id": signal_id, "entry": entry})
-                position = {
-                    "position_id": pid,
-                    "signal_id": signal_id,
-                    "underlying": underlying,
-                    "expiry": str(expiry),
-                    "signal_date": str(today),
-                    "opened_at_utc": now_utc(),
-                    "lot_size": lot,
-                    "lot_size_source": lot_source,
-                    "strikes": strikes,
-                    "entry_prices": entry,
-                    "entry_price_sources": entry_sources,
-                    "entry_costs_estimate": cost_model,
-                    "slippage_points_per_leg": SLIPPAGE,
-                    "paper_only": True,
-                }
-                append_jsonl("events.jsonl", {
-                    "event_type": "OPEN",
-                    "timestamp_utc": now_utc(),
-                    "position_id": pid,
-                    "position": position,
-                })
-                sig.update({
-                    "trade": True,
-                    "paper_position_id": pid,
-                    "paper_entry": entry,
-                    "lot_size": lot,
-                    "lot_size_source": lot_source,
-                    "estimated_entry_cost_rupees": cost_model["total_enhanced_entry_cost"],
-                })
+                    pid = stable_id({"signal_id": signal_id, "entry": entry})
+                    position = {
+                        "position_id": pid,
+                        "signal_id": signal_id,
+                        "underlying": underlying,
+                        "expiry": str(expiry),
+                        "signal_date": str(today),
+                        "opened_at_utc": now_utc(),
+                        "lot_size": lot,
+                        "lot_size_source": lot_source,
+                        "strikes": strikes,
+                        "entry_prices": entry,
+                        "entry_price_sources": entry_sources,
+                        "entry_costs_estimate": cost_model,
+                        "slippage_points_per_leg": SLIPPAGE,
+                        "paper_only": True,
+                    }
+                    append_jsonl("events.jsonl", {
+                        "event_type": "OPEN",
+                        "timestamp_utc": now_utc(),
+                        "position_id": pid,
+                        "position": position,
+                    })
+                    sig.update({
+                        "trade": True,
+                        "paper_entry_available": True,
+                        "paper_position_id": pid,
+                        "paper_entry": entry,
+                        "lot_size": lot,
+                        "lot_size_source": lot_source,
+                        "estimated_entry_cost_rupees": cost_model["total_enhanced_entry_cost"],
+                    })
+                    sig["reason"] = "mc_ev_gate_pass"
+                except Exception as entry_exc:
+                    sig.update({
+                        "paper_entry_available": False,
+                        "reason": "gate_on_but_paper_execution_unavailable",
+                        "paper_entry_error": f"{type(entry_exc).__name__}: {entry_exc}",
+                    })
+                    append_jsonl("errors.jsonl", {
+                        "timestamp_utc": now_utc(),
+                        "run_id": run_id,
+                        "underlying": underlying,
+                        "mode": "paper_entry",
+                        "signal_id": signal_id,
+                        "error_type": type(entry_exc).__name__,
+                        "message": str(entry_exc),
+                    })
 
             append_jsonl("signals.jsonl", sig)
 
