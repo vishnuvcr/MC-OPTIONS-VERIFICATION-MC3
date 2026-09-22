@@ -64,3 +64,10 @@ Rectification:
 - No synthetic quotes are introduced.
 - Provider provenance is recorded for accepted observations.
 - If all providers fail, the observation remains invalid and is retained in the error/signal ledger.
+
+
+## PV-14 correction 1 — router regression — 2026-09-22
+- Mistake: while replacing the NIFTY provider function, the text edit removed the `live_chain` router required by `engine.py`.
+- Detection: GitHub Actions smoke failed at engine import with `ImportError: cannot import name 'live_chain'`.
+- Rectification: restored the router and kept provider selection isolated inside `market.py`.
+- Prevention: future provider edits must preserve and smoke-test the public market adapter surface before merge.
