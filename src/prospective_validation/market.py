@@ -109,5 +109,6 @@ def live_chain(underlying: str) -> tuple[pd.DataFrame, dict[str, Any]]:
     if underlying == "NIFTY":
         return fetch_nse_chain()
     if underlying == "SENSEX":
+        from .bse_online import fetch_sensex_chain
         return fetch_sensex_chain()
     raise ValueError(underlying)
