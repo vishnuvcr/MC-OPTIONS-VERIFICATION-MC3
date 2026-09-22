@@ -120,3 +120,14 @@ A separate research has now started from Phase 1 in this same repository, retain
 - [RQ-7 Paytm setup](research/rq7_margin/SETUP.md)
 
 **RQ-7 Phase 1:** authority recovery complete with open authenticated-validation items. Paytm's official SDK documents live option streaming and scrip/order margin capabilities, but historical actual broker margin has not yet been established. No margin-reduction claim is made.
+
+## RQ-7 GitHub-only execution
+
+RQ-7 Phase 1 has been revised to use GitHub as the primary execution and publication platform. No paid AWS/Lightsail/VPS infrastructure is required by default.
+
+- [GitHub-only architecture](research/rq7_margin/GITHUB_ONLY_ARCHITECTURE.md)
+- [GitHub bootstrap guide](research/rq7_margin/GITHUB_BOOTSTRAP.md)
+- [GitHub read-only workflow](.github/workflows/rq7-phase1-paytm-github.yml)
+- [Paytm GitHub probe](src/rq7_margin/paytm_github_probe.py)
+
+Current status: **READY FOR USER BOOTSTRAP**. The remaining step is to place the user's Paytm credentials/session material into GitHub Actions Secrets and run the manual read-only probe. No credentials should be sent in chat or committed to the repository.
