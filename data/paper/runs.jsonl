@@ -192,3 +192,5 @@
 {"mode": "mark", "repository_revision": "5b6fe0d4f537b29456ffd8f0e5fabea20009028d", "run_id": "f21535b8e3ef47f43428", "status": "DONE", "timestamp_utc": "2026-10-28T16:28:13.585125Z"}
 {"mode": "mark", "repository_revision": "32b9878b6b3cefcd47da5508d1cf82e10bc42beb", "run_id": "b3303127a9114af02514", "status": "STARTED", "timestamp_utc": "2026-10-29T10:41:03.120443Z"}
 {"mode": "mark", "repository_revision": "32b9878b6b3cefcd47da5508d1cf82e10bc42beb", "run_id": "b3303127a9114af02514", "status": "DONE", "timestamp_utc": "2026-10-29T10:41:03.120657Z"}
+{"mode": "scan", "repository_revision": "dacc205401a52a752f65b39384694efe6dfff3d2", "run_id": "0726fb269b04607463ca", "status": "STARTED", "timestamp_utc": "2026-10-29T10:44:03.159234Z"}
+{"mode": "scan", "repository_revision": "dacc205401a52a752f65b39384694efe6dfff3d2", "run_id": "0726fb269b04607463ca", "status": "DONE", "timestamp_utc": "2026-10-29T10:44:07.786868Z"}
